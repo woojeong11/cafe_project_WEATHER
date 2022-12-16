@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.Order1Mapper">
+ 
+          <!-- 시퀀스가 있는 경우 일괄추가 -->
+        <insert id="insertOrderBatch" parameterType="list">
+                INSERT INTO ORDERTBL1 (NO ,NAME ,PRICE ,QUANTITY ,REGDATE ,TPRICE ,ADDRESSNO ,USERID ,PRODUCTNO,TYPE ,MSG )
+                SELECT SEQ_ORDER1_NO.NEXTVAL, T1.* FROM (
+                <foreach collection='list' item='item' separator='UNION ALL '>
+                        SELECT '${item.name}' NAME,'${item.price}' PRICE,'${item.quantity}' QUANTITY,CURRENT_TIMESTAMP,
+                        '${item.tprice}' TPRICE,'${item.addressno}' ADDRESSNO,'${item.userid}' USERID,'${item.productno}' PRODUCTNO
+                        ,'${item.type}' TYPE,'${item.msg}' MSG FROM DUAL
+                </foreach>
+                ) T1
+        </insert>
+
+        <select id="selectOrderList" parameterType="map" resultType="com.example.dto.Order1DTO">
+                SELECT O.* FROM ORDERTBL1 O WHERE USERID = #{userid} AND TYPE = 1
+        </select>
+
+        <update id="updateList" parameterType="map">
+                UPDATE ORDERTBL1 SET TYPE=2, PAYCODE = #{paycode} WHERE USERID = #{userid} AND TYPE = 1
+        </update>
+
+        <delete id="deleteorder" parameterType="String">
+                DELETE FROM ORDERTBL1 WHERE USERID = #{userid} AND TYPE = 1;
+        </delete>
+
+        <select id="selectType2" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM PAYRESULT_VIEW P WHERE P.USERID = #{userid} AND P.TYPE = 2) C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC
+        </select>
+
+        <select id="selectType2ByPaycode" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT D.* FROM
+                (SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM PAYRESULT_VIEW P WHERE P.USERID = #{userid} AND P.TYPE = #{type} ) C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC)D WHERE D.PAYCODE LIKE '%' || #{paycode} || '%';
+        </select>
+
+        <select id="selectType0" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM PAYRESULT_VIEW P WHERE P.USERID = #{userid} AND P.TYPE = 0) C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC
+        </select>
+
+        <select id="selectoneOrder" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT C.* FROM PAYRESULT_VIEW C WHERE C.USERID = #{userid} AND C.PRODUCTNO = #{productno} AND C.TYPE = #{type} AND C.PAYCODE = #{paycode}
+        </select>
+
+        <select id="selectType2foradmin" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM PAYRESULT_VIEW P WHERE P.TYPE = #{type} AND P.USERID LIKE '%' || #{userid} || '%') C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC 
+        </select>
+
+        <select id="selectType0foradmin" parameterType="map" resultType="com.example.entity.PayResult">
+                SELECT D.* FROM
+                (SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM PAYRESULT_VIEW P WHERE P.TYPE = #{type} AND P.USERID LIKE '%' || #{userid} || '%') C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC) D WHERE D.PAYCODE LIKE '%' || #{paycode} || '%';
+        </select>
+
+        <!-- // 카운트 (갯수) 넣는 TYPE 번호에 따라 줌 ( CUSTOMER용 ) -->
+        <select id="countforcustomer" parameterType="map" resultType="Integer">
+                SELECT COUNT(*) CNT FROM PAYRESULT_VIEW WHERE TYPE = #{type} AND USERID LIKE '%' || #{userid} || '%' GROUP BY TYPE
+        </select>
+
+        <delete id="cancelorder" parameterType="String">
+                DELETE FROM ORDERTBL1 WHERE PAYCODE = #{code};
+        </delete>
+</mapper>

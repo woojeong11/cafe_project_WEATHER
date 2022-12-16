@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-추천등록</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <div class="container-xxl py-6" style="text-align: center;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <p class="display-5 mb-3" style="font-size: x-large;">추천 아이템 등록</p>
+        </div>
+
+        <form th:action="@{/admin/recommend/insert.do}" method="post">
+            <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                <div class="col-md-6">
+                    <label>음료</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="product1">
+                        <option th:value="0">
+                            <p>선택없음</p>
+                        </option>
+                        <option th:each="tmp : ${beverage}" th:value="${tmp.no}">
+                            <p th:text="${tmp.name}" th:value="${tmp.no}"></p>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                <div class="col-md-6">
+                    <label>디저트</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="product2">
+                        <option th:value="0">
+                            <p>선택없음</p>
+                        </option>
+                        <option th:each="tmp : ${dessert}" th:value="${tmp.no}">
+                            <p th:text="${tmp.name}" ></p>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                <div class="col-md-6">
+                    <label>카테고리(날씨)</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="category">
+                        <option th:value="D">
+                            <p>눈</p>
+                        </option>
+                        <option th:value="C">
+                            <p>비</p>
+                        </option>
+                        <option th:value="E">
+                            <p>더움</p>
+                        </option>
+                        <option th:value="A">
+                            <p>맑음</p>
+                        </option>
+                        <option th:value="B">
+                            <p>흐림</p>
+                        </option>
+                        <option th:value="F">
+                            <p>추움</p>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 30px;" type="submit" value="등록하기">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+</body>
+
+</html>

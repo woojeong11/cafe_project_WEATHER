@@ -1,0 +1,308 @@
+
+.basketdiv {
+        width: 100%;
+        border-top: 1px solid #e0e0e0;
+        float: left;
+        font-size: 0.9375em;
+        margin-bottom: 20px;
+    }
+    .basketdiv .row.head {
+        border-bottom: 1px solid rgb(0, 0, 0);
+        box-sizing: border-box;
+        background-color: #ffffff;
+        font-weight: 500;
+    }
+    .basketdiv .data {
+        border-bottom: 1px solid rgba(90, 93, 100, 0.411);
+        box-sizing: border-box;
+        cursor: pointer;
+        float: left;
+        width: 100%;
+    }
+    .basketdiv .data .empty{
+        text-align: center;
+        padding: 12px 0;
+    }
+    .basketdiv .row.head .subdiv {
+        background-color: #ffffff2d;
+    }
+    .basketdiv .row > .subdiv {
+        display: block;
+        float: left;
+    }
+    .basketdiv .row > .subdiv:nth-child(1) {
+        width: 650px;
+    }
+    .basketdiv .row > .subdiv:nth-child(2) {
+        width: 600px;
+    }
+    .basketdiv .row > .subdiv:nth-child(3) {
+        width: 100px;
+    }
+    .basketdiv2 .row > .subdiv:nth-child(1) {
+        width: 600px;
+    }
+    .basketdiv2 .row > .subdiv:nth-child(2) {
+        width: 40%;
+    }
+    .basketdiv .row > div > div {
+        display: block;
+        float: left;
+        text-align: center;
+        margin: 0;
+        padding: 12px 0;
+    }
+    .basketdiv .row.data > div > div {
+        height: 100px;
+        line-height: 20px;
+    }
+        .basketdiv .data .num .updown {
+            color: #000000;
+            font-size: 1em;
+            letter-spacing: -5px;
+        }
+        .basketdiv .check {
+            width: 10%;
+        }
+    .basketdiv .check input[type=checkbox] {
+        transform: scale(1.5);
+    }
+    .basketdiv .img{
+        width: 20%;
+    }
+    .basketdiv .pname{
+        text-align: center;
+        width: 70%;
+    }
+    .basketdiv2 .pname {
+        text-align: center;
+        width: 50%;
+    }
+    .basketdiv .basketprice {
+        text-align: center;
+        width: 30%;
+    }
+    .basketdiv .num {
+        width: 40%;
+        /* min-width: 105px; */
+
+    }
+    .basketdiv .sum1 {
+        width: 20%;
+
+      /* max-width: 80px; */
+        color: #000000;
+    }
+    .basketdiv .point {
+        width: 50%;
+    }
+    .basketdiv2 .basketprice {
+        width: 25%;
+    }
+
+    .basketdiv2 .num {
+        width: 25%;
+    }
+
+    .basketdiv2 .sum1 {
+        width: 30%;
+        color: #000000;
+    }
+
+    .basketdiv2 .point {
+        width: 25%;
+    }
+    .basketdiv .basketcmd{
+        text-align: center;
+        width: 90%;
+    }
+    .basketdiv .data .pname {
+        text-align: center !important;
+      line-height: 1.2 !important;
+    }
+    .basketdiv .data .price, .basketdiv .data .sum, .basketdiv .data .point {
+        text-align: right;
+    }
+    .baseform > tbody > tr > td:first-child {
+        width: 100px;
+    }
+
+.buttongroup {
+    padding: 11px 0;
+    margin: 50px 0;
+}
+.narrowbuttongroup{
+    margin: 15px 0;
+}
+    .buttongroup.center {
+        text-align: center;
+    }
+    .buttongroup input[type=text], .buttongroup input[type=password] {
+        height: 30px;
+    }
+    .buttongroup button, .buttongroup a {
+        margin-right: 5px;
+    }
+    .buttongroup button:last-child, .buttongroup a:last-child {
+        margin-right: 0;
+    }
+
+    .abutton, .abutton:link, .abutton:visited, .abutton:active, input[type=button] {
+        background-color: #8fb7e5;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        cursor: pointer;
+        letter-spacing: -1px;
+        padding: 3px 5px;
+        margin: 2px 3px;
+        width: auto;
+        word-break: keep-all;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9375em;
+    }
+
+.abutton-alt {
+    background-color: #d3e2c6;
+}
+
+.red {
+    color:#b00;
+}
+.blue {
+  color: #8fb7e5;
+}
+.basketrowcmd, .sumcount, .summoney{
+  text-align: right;
+  margin-bottom: 10px;
+}
+.sumcount, .summoney{
+    text-align: center;
+  font-size: 1.25em;
+    font-weight: bold;
+}
+.buttongroup{
+  text-align: center;
+}
+.buttongroup a{
+  text-decoration: none;
+}
+.cmd a, .cmd span {
+    padding: 12px 30px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #000;
+    background-color: #d83030;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+.cmd.small a, .cmd.small span {
+    padding: 6px 20px;
+    font-size: 0.8125em;
+}
+
+.orderform .p_num {
+    text-align: right;
+    width: 40px;
+    font-size: 1em;
+}
+    .content_right{margin:20px; width:520px; padding-top:30px;}
+    .content_right h2{font-size:32px; height:50px; color:#444; line-height:1;   border-bottom:1px solid #dfdfdf;}
+    .content_right dl{display:table; width:100%; }
+    .content_right dl dt{display:table-cell; vertical-align:top; width:20%;}
+    .content_right dl dd{display:table-cell; vertical-align:top; width:80%;}
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  
+  /* 숨기기 */
+  z-index: -1;
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+  z-index: 1000;
+  transition: all .5s;
+}
+
+.window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+  
+  /* 임시 지정 */
+  width: 100px;
+  height: 100px;
+  
+  /* 초기에 약간 아래에 배치 */
+  transform: translate(-50%, -40%);
+}
+
+.show .popup {
+  transform: translate(-50%, -50%);
+  transition: all .5s;
+}
+/* ==================================================소윤 */
+.background1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    
+    /* 숨기기 */
+    z-index: -1;
+    opacity: 0;
+  }
+  
+  .show1 {
+    opacity: 1;
+    z-index: 1000;
+    transition: all .5s;
+  }
+  
+  .window1 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .popup1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+    
+    /* 임시 지정 */
+    width: 500px;
+    height: 800px;
+    border-radius: 10px;
+    
+    /* 초기에 약간 아래에 배치 */
+    transform: translate(-50%, -40%);
+  }
+  
+  .show1 .popup1 {
+    transform: translate(-50%, -50%);
+    transition: all .5s;
+  }

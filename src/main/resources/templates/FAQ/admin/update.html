@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+    <title>관리자-FAQ수정</title>
+</head>
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+    
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+<!--     
+    <form th:action="@{/faq/adminupdate.do}" method="post">
+
+        번호:<input type="text" name="no" th:value="${obj.no}" /><br/>
+        제목:<input type="text" name="title" th:value="${obj.title}" /><br/>
+        내용:<input type="text" name="content" th:value="${obj.content}" /><br/>
+
+        <input type="submit" value="수정"/>
+    </form> -->
+
+
+    <div class="container" id="boody" style="padding-top: 20px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3">FAQ 수정</h1>
+        </div>
+        
+        <div class="row g-5 justify-content-center">
+
+            <form  id="updateFaq"th:action="@{/faq/adminupdate.do}" method="post">
+                <input type="hidden" name="no" th:value="${obj.no}" /><br/>
+
+                <div class="col-12">
+
+                    <div class="form-floating" style="padding-bottom: 10px;">
+
+                        <input  type="text" class="form-control" id="subject" placeholder="Subject" th:value="${obj.title}" name="title">
+                        <label for="subject">제목</label>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea class="form-control" th:text="${obj.content}" placeholder="Leave a message here" id="message" style="height: 200px"  name="content" th:value="${obj.content}">
+                            <!-- <p ></p> -->
+                        </textarea>
+                        <label for="subject">내용</label>
+                    </div>
+                </div>
+
+                
+                <div class="col-12" style="padding-top: 10px;">
+                    <button class="btn btn-primary rounded-pill py-3 px-5" type="button"  th:onclick="|javascript:updateAction()|">수정하기</button>
+                </div>
+
+            </form>
+
+            <div class="col-12" style="padding-top: 10px;">
+                <a th:href="@{/faq/adminselectlist.do}">
+                    <button style="position: relative; left:180px; bottom:117px;"  class="btn btn-primary rounded-pill py-3 px-5" type="submit">목록</button>
+                </a>
+            </div>
+ 
+        </div>
+    </div>
+
+    <script>
+
+
+        const updateAction= () =>{
+            if(confirm('수정하시겠습니까?')== true){
+                alert('수정되었습니다.');
+                
+                //id가 form인걸 찾아 submit수행
+                document.getElementById('updateFaq').submit();
+
+            }
+            else{
+                alert('취소되었습니다.')
+            }
+        }
+
+       
+    </script>
+
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+</body>
+</html>

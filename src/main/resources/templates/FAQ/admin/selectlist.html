@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/FAQselectlist.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <title>관리자-자주묻는질문</title>
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+
+    <!-- Carousel start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                    <div class="carousel-caption">
+                        <div class="container" style="height: 50%;">
+                            <div style="position: absolute; bottom: 100px; right: 100px; width: inherit; text-align: right;">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+
+    <!-- 자주묻는 질문 목록=============================================  -->
+
+    <div style="padding-top: 150px;">
+        <div  class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; min-width: 300px;">
+            <h1 class="display-5 mb-3 fontmalgun">FAQ 자주묻는질문</h1>
+        </div>
+    </div>
+
+    <!-- <h3>목록</h3> -->
+    <CENTER>
+        <div class="container" style="display: inline-block; ">
+            <span style="position: relative; right: 270px; top:40px;">
+                <a th:href="@{/faq/adminselectlist.do(type=1)}">최신순</a>
+                <a th:href="@{/faq/adminselectlist.do(type=2)}">조회수순</a>
+            </span>
+
+            <a style="position: relative; top:40px; left: 230px;" th:href="@{/faq/admininsert.do}">
+                등록하기
+                <svg style="width:25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                    <path d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z"/>
+                </svg>
+            </a>
+    
+            <div style="text-align: center;" >
+                <form th:action="@{/faq/adminselectlist.do}" method="get">
+                    <input class="search-txt" type="text" name="text" placeholder="질문제목을 입력해주세요.">
+                        <button style=" border:none;background-color:white"type="submit">
+                            <svg style="width: 15px;"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <path style="margin-bottom: 50px;" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg>
+                        </button>
+                </form>
+            </div>
+
+            <table class="type04">
+                
+            
+            <thead>
+                <tr>
+                    <!-- <th>No</th> -->
+                    <th style="text-align: center;">제목</th>
+                    <th>hit</th>
+                    <th style="text-align: center;">날짜</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="obj, idx : ${obj}">
+
+                    <td hidden="hidden" style="width: 40px;"th:text="${obj.no}"></td>
+                    <td style="width: 600px;">
+                        <a  class="a-link" th:href="@{/faq/adminselectone.do(no=${obj.no},type=${param.type})}" th:text="${obj.title}" ></a>
+                    </td>
+                    <td style="width: 40px;" th:text="${obj.hit}"></td>
+
+                    <td style="text-align: center;" th:text="${obj.regdate1}"></td>
+                        
+                </tr>
+
+            </tbody>
+        </table>
+            <th:block th:each="i : ${#numbers.sequence(1, pages)}">
+                <a class="a-link" th:href="@{/faq/adminselectlist.do(type=${param.type},page=${i}, txt=${param.text})}" th:text="${i}"></a>
+            </th:block>
+
+        </div>
+    </CENTER>
+    
+    <!-- <div th:if="${type == 1}"></div> -->
+
+    <!-- 자주묻는 질문 목록=============================================  -->
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+    
+</body>
+</html>

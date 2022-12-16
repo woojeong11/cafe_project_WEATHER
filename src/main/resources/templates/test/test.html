@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>test Page</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+<body>
+    
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+</body>
+</html>

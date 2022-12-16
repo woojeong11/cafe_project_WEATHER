@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    
+</head>
+<body>
+    <div th:fragment = "navbarfragment">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+        <!-- Spinner End -->
+        
+        
+        
+        <!-- Navbar Start -->
+        <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+            <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
+                <div class="col-lg-6 px-5 text-start">
+                    <small><i class="fa fa-map-marker-alt me-2"></i>부산광역시 부산진구 중앙대로 668 (A1프라자6층)</small>
+                    <small class="ms-4"><i class="fa fa-envelope me-2"></i>ff5979@naver.com</small>
+                </div>
+                <div class="col-lg-6 px-5 text-end">
+                    <a class="text-body ms-3" href="" data-bs-toggle="modal" data-bs-target="#adminloginModalForm" th:if="${session.LOGIN == null}" style="margin-right: 20px;">점주로그인</a>
+                    <small>Follow us:</small>
+                    <a class="text-body ms-3" href=""><i class="fab fa-facebook-f"></i></a>
+                    <a class="text-body ms-3" href=""><i class="fab fa-twitter"></i></a>
+                    <a class="text-body ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
+                    <a class="text-body ms-3" href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+                <a th:href="@{/home.do}" class="navbar-brand ms-4 ms-lg-0">
+                    <img th:src="@{/img/aboutUs/Logo.png}" alt="Image" style="width: 20%;" />
+                </a>
+                <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto p-4 p-lg-0">
+                        <a th:href="@{/home.do}" class="nav-item nav-link active">홈</a>
+                        <a th:href="@{/about/home.do}" class="nav-item nav-link" style="width: 100px;">About Us</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" >판매</a>
+                            <div class="dropdown-menu m-0">
+                                <a th:href="@{/product/list.do?category=drink}" class="dropdown-item">음료</a>
+                                <a th:href="@{/product/list.do?category=dessert}" class="dropdown-item">디저트</a>
+                                <a th:href="@{/product/list.do?category=goods}" class="dropdown-item">상품</a>
+                            </div>
+                        </div>
+                        <a th:if="${session.LOGIN == null}" th:href="@{/review/guestselectlist.do}" class="nav-item nav-link" style="width: 110px;">리뷰게시판</a>
+                        <a th:if="${session.LOGIN != null}" th:href="@{/review/selectlist.do}" class="nav-item nav-link" style="width: 110px;">리뷰게시판</a>
+                        <div class="nav-item dropdown">
+                            <form th:action="@{/chat/room}" id="chatinto" method="post">
+                                <a href="#" class="nav-link dropdown-toggle" style="width: 100px;">고객센터</a>
+                                <div class="dropdown-menu m-0">
+                                    <a th:href="@{/qboard/home.do}" class="dropdown-item">문의게시판</a>
+                                    <a th:href="@{/faq/selectlist.do}" class="dropdown-item">자주찾는질문</a>
+                                    <a class="dropdown-item text-start"><input type="submit" id="chatbtn" value="1:1문의" style="background-color: transparent;border: none;cursor: pointer;"></a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="nav-item dropdown" th:if="${session.LOGIN != null}" >
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="width: 100px;">마이페이지</a>
+                            <div class="dropdown-menu m-0">
+                                <a th:href="@{/member/mypage.do}" class="dropdown-item">내정보보기</a>
+                                <a th:href="@{/member/orderinfo/ing.do}" class="dropdown-item">진행주문목록</a>
+                                <a th:href="@{/member/orderinfo/complete.do}" class="dropdown-item">완료주문내역</a>
+                                <a th:href="@{/member/orderinfo/myreview.do}" class="dropdown-item">리뷰목록</a>
+                                <a th:href="@{/member/orderinfo/myaddress.do}" class="dropdown-item">배송지목록 </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-flex ms-2">
+                            <a class="btn-sm-square bg-warning rounded-circle ms-3" href="" id="loginicon" data-bs-toggle="modal" data-bs-target="#ModalForm" th:if="${session.LOGIN == null}" >
+                                <small class="fa fa-user text-body"></small>
+                            </a>
+                            <a class="btn-sm-square bg-info rounded-circle ms-3 position-relative" th:href="@{/cart/home.do}">
+                                <small class="fa fa-fw fa-shopping-bag text-body">
+                                </small>
+                                <span class="position-absolute translate-middle start-100 badge rounded-pill bg-light text-dark" id="cartcount"></span>
+                            </a>
+                            <a class="btn-sm-square bg-secondary rounded-circle ms-3" href="https://kauth.kakao.com/oauth/logout?client_id=c51973de317cdceb44e5847d161665bd&logout_redirect_uri=http://3.38.209.149:8080/TEST202/member/logout.do" 
+                            th:if=" ${session.LOGIN == '카카오회원'}">
+                                <small class="fa fa-solid fa-right-from-bracket text-body"></small>
+                            </a>
+                            <a class="btn-sm-square bg-secondary rounded-circle ms-3" th:href="@{/member/logout.do}" th:if="${session.LOGIN == '네이버회원'}">
+                                <small class="fa fa-solid fa-right-from-bracket text-body"></small>
+                            </a>
+                            <a class="btn-sm-square bg-secondary rounded-circle ms-3"  th:href="@{/member/logout.do}" th:if="${session.LOGIN == '일반회원' || session.LOGIN == '점주'}">
+                                <small class="fa fa-solid fa-right-from-bracket text-body"></small>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <!-- Navbar End -->
+            <!-- Login Modal -->
+            <div class="modal fade" id="ModalForm" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <!-- Login Form -->
+                      <form th:action="@{/member/login.do}" id="loginform" method="post">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Login</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                              <label for="Username">UserID<span class="text-danger">*</span></label>
+                              <input type="text" name="userid" class="form-control" id="Loginuserid" placeholder="Enter Username">
+                          </div>
+              
+                          <div class="mb-3">
+                              <label for="Password">Password<span class="text-danger">*</span></label>
+                              <input type="password" name="userpw" class="form-control" id="Password" placeholder="Enter Password">
+                          </div>
+                          <div class="mb-3">
+                              <input class="form-check-input" type="checkbox"  id="rememberid">
+                              <label class="form-check-label" for="remember">아이디 저장하기</label>
+                              <a th:href="@{/member/join.do}" class="float-end">회원가입</a>
+                          </div>
+                        </div>
+                        <div class="modal-footer pt-4">                  
+                            <input type="submit" class="btn btn-success mx-auto w-75" style="background-color: lightskyblue;" value="Login" />
+                        </div>
+                        <p class="text-center"><a th:href="@{/member/findidpw.do}">아이디/비밀번호 찾기</a></p>
+                        <div class="modal-footer pt-4">
+                            <div id="naverIdLogin" style="text-align: center; left: 20px;" ></div>
+                            <div  style="text-align: center; margin: 20px; margin-left: 35px; margin-right: 35px;">
+                                <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=c51973de317cdceb44e5847d161665bd&redirect_uri=http://3.38.209.149:8080/TEST202/kakao/home.do">
+                                    <img th:src="@{/img/kakao_login_medium_narrow.png}" alt="Image"  />
+                                </a>
+                            </div>
+                        </div> 
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!--일반회원 로그인 end-->
+
+              <!--점주로그인 모달 start-->
+              <div class="modal fade" id="adminloginModalForm" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                      <!-- Login Form -->
+                      <form th:action="@{/member/adminlogin.do}" method="post">
+                        <div class="modal-header">
+                          <h5 class="modal-title">점주Login</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                              <label for="Username">UserID<span class="text-danger">*</span></label>
+                              <input type="text" name="userid" class="form-control" placeholder="Enter Username">
+                          </div>
+                          <div class="mb-3">
+                              <label for="Password">Password<span class="text-danger">*</span></label>
+                              <input type="password" name="userpw" class="form-control" placeholder="Enter Password">
+                          </div>
+                        </div>
+                        <div class="modal-footer pt-4">                  
+                            <input type="submit" class="btn btn-success mx-auto w-75" style="background-color: lightskyblue;" value="Login" />
+                        </div> 
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!--점주로그인 모달 end-->
+              <script>
+                // 폼에 submit 이벤트가 일어 났을때 실행할 함수 등록
+                document.querySelector("#loginform").addEventListener("submit", function(e){
+                    
+                    
+                    
+                    // 아이디 입력폼의 value
+                    let userid = document.getElementById('Loginuserid').value;
+                    
+                    // 아이디 저장이 check 상태라면, session storage에 id만 저장
+                    let check = document.getElementById('rememberid').checked;
+                    console.log( check);
+                    console.log(userid);
+                    if(check){
+                        sessionStorage.setItem("rememberid" ,  userid);
+                    }
+                    else{
+                        sessionStorage.removeItem("rememberid");
+                    }
+                });
+
+                // 로그인 모달창을 여는 버튼 클릭시 session storage의 존재유무에 따라 아이디 자동입력
+                document.getElementById('loginicon').addEventListener('click', function(){
+
+                    // 아이디 입력폼의 value
+                    let userid = document.getElementById('Loginuserid')
+
+                    if(sessionStorage.getItem("rememberid") != null){
+                        userid.setAttribute('value', sessionStorage.getItem("rememberid") );
+                        $("#rememberid").prop("checked", true)
+                    }
+                });
+
+              </script>
+              <script th:inline="javascript">
+                var login = '[[${session.LOGIN}]]';
+                // 폼에 submit 이벤트가 일어 났을때 실행할 함수 등록
+                document.querySelector("#chatinto").addEventListener("submit", function(e){
+                    console.log(login)
+                    //만일 폼이 유효하지 않는다면 전송을 막아주기
+                    if(login == "null"){
+                        //이벤트 객체의 함수를 이용해서 폼 전송 막아주기 
+                        e.preventDefault();
+                        alert('로그인 후 이용가능한 서비스입니다.');
+                    }
+                });
+              </script>
+        </div>
+    </body>
+    </html>

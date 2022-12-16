@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+    <title>리뷰등록</title>
+
+    <style>
+        .input-file-button{
+            /* padding: 6px 25px; */
+            background-color:#FF6600;
+            border-radius: 46px;
+            color: white;
+            cursor: pointer;
+        }
+        .select {
+            box-sizing: border-box;
+            min-width: 600px;
+            height: calc(3.5rem + 2px);
+            padding: 1rem 0.75rem;
+            width: 100%;
+            padding-left: 50px;
+            font-size: 17px;
+            border-radius: 6px;
+            border-color: rgba(106, 106, 106, 0.341);
+        }
+        .option {
+            padding: 4px;
+            font-size: 17px;
+            color: #fff;
+            background: #272822;
+        }
+
+    </style>
+</head>
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/006.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    
+
+    <!-- 인서트 Start -->
+    <!-- <div class="container-xxl py-6"> -->
+    <div class="container" id="boody" style="padding-top: 20px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3 headerfont">리뷰 작성</h1>
+            <p class="fontmalgun">고객님의 리얼후기를 들려주세요 !</p>
+        </div>
+
+        <div class="row g-5 justify-content-center">
+            <div class="row g-3">                
+                <div style="padding: 10px;">
+                    <select id="productno" class="select">
+                        <option th:each="tmp : ${list}" th:value="${tmp.productno}">
+                            <p th:text="${tmp.productno}"></p>
+                            <p th:text="${tmp.productname}" ></p>
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="subject" placeholder="Subject" name="title">
+                        <label for="subject">제목</label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 200px" name="content"></textarea>
+                        <label for="message">내용</label>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- <input type="file" accept="image/*" name="imageee" id="file" multiple="multiple"> --> 
+                    <br/>
+                    <label className="input-file-button" for="input-file">
+                        <img th:src="@{/img/Review/file.png}" style="width: 70px;padding-bottom: 10px; position: relative;">
+                    </label>
+                    <input type="file" id="input-file" style="display:none"  accept="image/*" th:onchange="|javascript:onChange(event)|"  /><br/>
+                    
+                </div> 
+
+                <div class="col-12">
+                    <button class="btn btn-primary rounded-pill py-3 px-5" type="button" th:onclick="|javascript:onSubmit()|">등록하기</button>
+                </div>
+                <div class="col-12" style="padding-top: 10px;">
+                    <a th:href="@{/review/selectlist.do}">
+                        <button style="position: relative; left:170px; bottom:84px;"  class="btn btn-primary rounded-pill py-3 px-5" type="button">목록</button>
+                    </a>
+                </div>
+                <div id="divs">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        const out   = document.getElementById("divs");
+        const file  = document.getElementById("input-file");
+        let files   = [];
+
+        // 빈 파일객체 생성하기
+        // for(let i=0; i<10; i++) {
+        //     files.push(new File([""], "_"));
+        // }
+        
+        /* files 배열에서 추가 */
+        const onChange = (e) => {
+            console.log(e);
+            files.push(e.target.files[0]);
+            onPreview();
+        };
+
+        /* files 배열에서 삭제 */
+        const onDelete = (idx) => {
+            console.log(idx);
+            files.splice(idx, 1);
+            onPreview();
+        };
+
+        /* 이미지 추가,삭제시 화면표시 */
+        const onPreview = () => {
+            out.innerHTML = '';
+            for(let i=0; i<files.length; i++){
+                const url  = URL.createObjectURL(files[i]);
+
+                out.innerHTML += 
+                    `<div style="border:1px solid #cccccc;width:200px; display: inline-block; margin-left: 40px;">`+
+                        `<img src=${url} style="width:100%;"/>`+
+                        `<input type="button" class="btn-close" style="position: absolute;" onclick="onDelete('${i}')" />`+
+                    `</div>`;
+            }
+            console.log(files);
+            file.value= '';
+        };
+
+
+        /* rest controller 호출하기 */
+        const onSubmit = () => {
+            let req = new XMLHttpRequest();
+            let formData = new FormData();
+            
+            for(let i=0;i<files.length;i++){
+                formData.append("files", files[i]);
+            }
+            formData.append("productno", document.getElementById('productno').value);
+            formData.append("title", document.getElementById('subject').value);
+            formData.append("content", document.getElementById('message').value);
+            console.log(formData);
+
+            req.open("POST", "[[@{/rest/review/insert.json}]]");
+            req.send(formData);
+            
+            console.log(req);
+            req.onload = function(){
+                var obj = new Object(req.responseText);
+                var json= JSON.parse(obj);
+                console.log(json.status);
+                if(json.status == 200){
+                    window.location.href= "[[@{/review/selectlist.do}]]";
+                }
+            };
+        
+        };
+    </script>
+</body>
+</html>

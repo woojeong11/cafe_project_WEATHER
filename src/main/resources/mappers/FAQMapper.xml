@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.FAQMapper">
+
+    <!-- 등록 -->
+    <insert id="insertFAQ" parameterType="com.example.dto.FAQDTO">
+        INSERT INTO FAQTBL(NO, TITLE, CONTENT, HIT, REGDATE)
+        VALUES(SEQ_FAQTBL_NO.NEXTVAL,#{title},#{content},0,CURRENT_TIMESTAMP)
+    </insert>
+
+    <!-- 수정 -->
+    <update id="updateFAQ" parameterType="com.example.dto.FAQDTO">
+        UPDATE FAQTBL SET CONTENT=#{content},TITLE=#{title} WHERE NO=#{no}
+    </update>
+
+    <!-- 삭제 -->
+    <delete id="deleteFAQ" parameterType="long">
+        DELETE FROM FAQTBL WHERE NO=#{no}
+    </delete>
+
+    <!-- 제목으로검색, 페이지네이션
+    <select id="FAQSearchPagenationList" parameterType="map" resultType="com.example.dto.FAQDTO">
+        SELECT F.* FROM ( 
+            SELECT 
+                F.*,TO_CHAR(REGDATE,'YYYY-MM-DD HH24:MI:SS') 
+                ROW_NUMBER() OVER (ORDER BY F.HIT DESC) ROWN
+                FROM FAQTBL F 
+                WHERE F.TITLE LIKE '%' || #{text} || '%'
+        ) 
+        F WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY ROWN ASC
+    </select>--> 
+    <select id="FAQSearchPagenationList" parameterType="map" resultType="com.example.dto.FAQDTO">
+        SELECT F.* FROM ( 
+            SELECT 
+                F.*,TO_CHAR(REGDATE,'YYYY-MM-DD HH24:MI:SS') REGDATE1, 
+                ROW_NUMBER() OVER (ORDER BY F.NO DESC) ROWN
+            FROM FAQTBL F WHERE F.TITLE LIKE '%' || #{text} || '%'
+        ) 
+        F WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY F.NO DESC
+    </select>
+
+    <!-- 히트순 정렬, 검색, 페이지네이션 -->
+    <select id="FAQSearchPagenationhitList" parameterType="map" resultType="com.example.dto.FAQDTO">
+        SELECT F.* FROM ( 
+            SELECT 
+                F.*,TO_CHAR(REGDATE,'YYYY-MM-DD HH24:MI:SS') REGDATE1,  
+                ROW_NUMBER() OVER (ORDER BY F.HIT DESC) ROWN
+                FROM FAQTBL F WHERE F.TITLE LIKE '%' || #{text} || '%'
+            ) 
+        F WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY F.HIT DESC
+    </select>
+
+    <!--갯수  -->
+    <select id="FAQcount" parameterType="String" resultType="long" >
+        SELECT COUNT(*) CNT FROM FAQTBL F WHERE F.TITLE LIKE '%' || #{text} || '%' 
+    </select>
+
+    <!--게시글 1개조회  -->
+    <select id="FAQselectOne" parameterType="long" resultType="com.example.dto.FAQDTO">
+        SELECT F.* FROM (SELECT F.*,TO_CHAR(REGDATE,'YYYY-MM-DD HH24:MI:SS') REGDATE1, ROW_NUMBER() OVER (ORDER BY F.HIT DESC) ROWN FROM FAQTBL F ORDER BY ROWN )F WHERE F.NO= #{no} 
+    </select>
+
+    <!--조회수순 이전글 -->
+    <select id="prevpageFAQhit" parameterType="long" resultType="long">
+        SELECT NO FROM 
+        (SELECT F.*, ROW_NUMBER() OVER (ORDER BY F.HIT DESC) ROWN FROM FAQTBL F ORDER BY ROWN )
+        WHERE ROWN = #{no}-1
+    </select>
+
+    <!--조회수순 다음글  -->
+    <select id="nextpageFAQhit" parameterType="long" resultType="long">
+        SELECT NO FROM 
+        (SELECT F.*, ROW_NUMBER() OVER (ORDER BY F.HIT DESC) ROWN FROM FAQTBL F ORDER BY ROWN )
+        WHERE ROWN = #{no}+1
+    </select>
+
+    <!-- 조회수 -->
+    <update id="updatedHitFAQ" parameterType="long">
+        UPDATE FAQTBL SET HIT=HIT+1 WHERE NO=#{no}
+    </update>
+
+    <!--이전글-->
+    <select id="prevpageFAQno" parameterType="Long" resultType="Long">
+        SELECT NO FROM FAQTBL WHERE NO <![CDATA[>]]> #{no} ORDER BY NO ASC LIMIT 1
+    </select>
+
+    <!-- 다음글  -->
+    <select id="nextpageFAQno" parameterType="Long" resultType="Long">
+        SELECT NO FROM FAQTBL WHERE NO <![CDATA[<]]> #{no} ORDER BY NO DESC LIMIT 1
+    </select>
+
+</mapper>
+
+<!-- update, delete, insert 는 반환타입(resultType타입이 없다) -->

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-물품등록</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+    <!-- 메인이미지 -->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="row g-0 gx-5 align-items-end">
+                <div class="col-lg-6"></div>
+            </div>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                        <h1 class="display-5 mb-3 headerfont">상품등록</h1>
+                        <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                    </div>
+                    <div class="row g-5 justify-content-center">
+                        <div class="col-lg-7 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                            <!-- <p class="mb-4">아이템insert</p> -->
+                            <form th:action="@{/admin/product/insert.do}" method="post" enctype="multipart/form-data">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <select name="category" class="form-select">
+                                                <option value="drink">음료</option>
+                                                <option value="dessert">디저트</option>
+                                                <option value="goods">상품</option>
+                                              </select>
+                                              <label for="category">카테고리선택</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="name">
+                                            <label for="name">아이템이름</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" name="price">
+                                            <label for="email">아이템가격</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Leave a message here" name="content" style="height: 200px"></textarea>
+                                            <label for="message">상품설명</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="file" class="form-control" name="file">
+                                            <label for="file">이미지 선택</label>
+                                        </div>
+                                    </div>
+                                        <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">상품등록하기</button>
+                                        <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/admin/product/list.do?category=drink}">상품관리</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact End -->
+
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+
+    <!-- <script>
+         const adminItem = (type)=>{
+            // alert('버튼');//제대로 동작하는지 확인
+            const form = document.getElementById('form');
+            if(type==1){
+                alert('삭제');
+                form.action="[[@{/admi/product/delete.do}]]";
+            }
+            else if(type==2){
+                alert('사진등록');
+               // form.action="[[@{/productimage/insert.do(no=100001)}]]";
+                // <a th:href="@{/boardimage/insert.do(no=${one.no})}">
+            }
+            form.submit();
+        }
+        
+    </script> -->
+</body>
+
+</html>

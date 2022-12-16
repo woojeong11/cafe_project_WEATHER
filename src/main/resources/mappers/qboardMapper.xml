@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.QboardMapper">
+
+<select id="qboardSeq" resultType="long">
+        SELECT SEQ_QBOARD_NO.NEXTVAL FROM DUAL
+</select>
+
+<!-- 질문작성 -->
+<insert id="insertQboard" parameterType="com.example.dto.QboardDTO">
+        <!-- INSERT INTO QBOARDTBL(NO ,CONTENT ,REGDATE ,TITLE ,USERID)
+        VALUES(SEQ_QBOARD_NO.NEXTVAL,#{content},CURRENT_TIMESTAMP,#{title},#{userid}) -->
+        INSERT INTO QBOARDTBL(NO ,CONTENT ,REGDATE ,TITLE ,USERID ,GRP,HIT,PASSWORD)
+        VALUES(#{no}, #{content},CURRENT_TIMESTAMP,#{title},#{userid},#{no},1,#{password})
+</insert>
+
+<!-- 답글작성 -->
+<insert id="insertRep" parameterType="com.example.dto.QboardDTO">
+        INSERT INTO QBOARDTBL(NO ,CONTENT ,REGDATE ,TITLE ,USERID,GRP,HIT,PASSWORD,ORIGINUSERID)
+        VALUES(SEQ_QBOARD_NO.NEXTVAL,#{content},CURRENT_TIMESTAMP,#{title},#{userid},#{grp},1,#{password},#{originuserid})
+</insert>
+
+<!-- 질문전체목록 -->
+<select id="selectList" resultType="com.example.dto.QboardDTO">
+        SELECT *,TO_CHAR(REGDATE,'YYYY-MM-DD') REGDATE1 FROM QBOARDTBL ORDER BY GRP DESC
+        <!-- SELECT *,ROW_NUMBER() OVER(ORDER BY GRP ASC) ROWN, TO_CHAR(REGDATE,'YYYY-MM-DD') REGDATE1 FROM QBOARDTBL ORDER BY GRP DESC,NO ASC -->
+
+</select>
+
+<!-- 1개선택 -->
+<select id="selectOne" resultType="com.example.dto.QboardDTO">
+        SELECT *,TO_CHAR(REGDATE,'YYYY-MM-DD') REGDATE1 FROM QBOARDTBL WHERE NO=#{no}
+</select>
+
+<!-- 검색어 페이지네이션 포함 글개수(제목) -->
+<select id="countBoardListLikePagenation" resultType="Long" parameterType="map">
+        SELECT COUNT(*) CNT FROM QBOARDTBL B 
+        <choose>
+        <when test="select == 'titlecontent' "> WHERE B.TITLE LIKE '%' || #{text} || '%' OR B.CONTENT LIKE '%' || #{text} || '%'</when>
+        <when test="select == 'title' "> WHERE B.TITLE LIKE '%' || #{text} || '%'</when>
+        <when test="select == 'content' "> WHERE B.CONTENT LIKE '%' || #{text} || '%'</when>
+        </choose>
+</select>
+
+<!-- 질문전체목록,검색어 -->
+<select id="qboardList" resultType="com.example.dto.QboardDTO" parameterType="map">
+        <!-- SELECT * FROM (
+                SELECT I.*,TO_CHAR(REGDATE,'YYYY-MM-DD') REGDATE1, ROW_NUMBER() OVER(ORDER BY GRP DESC) ROWN FROM QBOARDTBL I WHERE TITLE LIKE '%' || #{text} || '%' ORDER BY GRP DESC, NO ASC
+        ) WHERE ROWN BETWEEN #{start} and #{end} -->
+        SELECT * FROM (
+        SELECT I.*,TO_CHAR(REGDATE,'YYYY-MM-DD') REGDATE1, ROW_NUMBER() OVER(ORDER BY GRP DESC) ROWN FROM QBOARDTBL I 
+        <choose>
+        <when test="select == 'titlecontent' "> WHERE TITLE LIKE '%' || #{text} || '%' OR CONTENT LIKE '%' || #{text} || '%' ORDER BY GRP DESC, NO ASC</when>
+        <when test="select == 'title' "> WHERE TITLE LIKE '%' || #{text} || '%' ORDER BY GRP DESC, NO ASC</when>
+        <when test="select == 'content' "> WHERE CONTENT LIKE '%' || #{text} || '%' ORDER BY GRP DESC, NO ASC</when>
+        <when test="select == 'userid' "> WHERE USERID LIKE '%' || #{text} || '%' ORDER BY GRP DESC, NO ASC</when>
+        </choose>
+        ) WHERE ROWN BETWEEN #{start} and #{end}
+
+</select>
+
+<!-- 조회수증가 -->
+<update id="updatedHit" parameterType="long">
+        UPDATE QBOARDTBL SET HIT=HIT+1 WHERE NO=#{no}
+</update>
+
+<!-- 게시글수정 -->
+<update id="updateQboard" parameterType="com.example.dto.QboardDTO">
+        UPDATE QBOARDTBL SET CONTENT=#{content}, TITLE=#{title},PASSWORD=#{password}, REGDATE=CURRENT_TIMESTAMP WHERE NO=#{no}
+</update>
+
+<!-- 게시글 삭제 -->
+<delete id="deleteQboard" parameterType="long">
+        DELETE FROM QBOARDTBL WHERE NO=#{no}
+</delete>
+
+
+
+</mapper>

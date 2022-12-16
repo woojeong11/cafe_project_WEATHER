@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-물품수정</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+    <!-- 메인이미지 -->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3 headerfont">수정</h1>
+            </div>
+            <div class="row g-5 justify-content-center">
+
+                <div class="col-lg-7 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                    <p class="mb-4">제품명, 제품설명, 가격 수정 가능</p>
+                    <form th:action="@{/admin/product/update.do}" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="name" th:field=="${pro.name}">
+                                    <input type="hidden" class="form-control" name="no" th:field=="${pro.no}">
+                                    <label for="name">물품명</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" name="price" th:field=="${pro.price}">
+                                    <label for="price">물품가격</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select name="category" class="form-select">
+                                        <option value="drink">음료</option>
+                                        <option value="dessert">디저트</option>
+                                        <option value="goods">상품</option>
+                                      </select>
+                                      <label for="category">카테고리선택</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control" th:field=="${pro.content}" name="content" style="height: 200px"></textarea>
+                                    <label for="content">설명</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <!-- <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">수정하기</button> -->
+                                <input class="btn btn-primary rounded-pill py-3 px-5 mt-3" type="submit" value="수정하기" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+
+
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+</body>
+
+</html>

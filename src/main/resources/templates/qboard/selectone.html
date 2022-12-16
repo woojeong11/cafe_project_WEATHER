@@ -1,0 +1,207 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+
+    <head>
+    <meta charset="utf-8">
+    <title>문의상세</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+    <style>
+        .cococo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        }
+        .coco {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+    
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/004.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <!-- Contact Start -->
+
+    <!-- <p th:if="${session.LOGIN!=null}" th:text="${session.LOGIN}"></p> -->
+    <!-- <p th:text="${userid}"></p> -->
+    <!-- <p th:text="${session.TOKEN}"></p> -->
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="row g-0 gx-5 align-items-end">
+                <div class="col-lg-6"></div>
+            </div>
+            <!-- 전체공개일때 -->
+            <div class="tab-content" th:if="${board.password == 'Y'}">
+                <div id="tab-1" class="tab-pane fade show p-0 active" style="border-radius: 30px; border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; ">
+                        <h1 class="display-5 mb-3 headerfont">문의게시판</h1>
+                    </div>
+                    <div class="row g-5 justify-content-center">
+                        <div class="col-lg-10 col-md-12 wow fadeInUp" >
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">제목</span>
+                                <input type="text" class="form-control" th:value="${board.title}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;" /> 
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">작성자</span>
+                                <input type="text" class="form-control" th:value="${board.userid}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;"/> 
+                            </div>
+                            <span>
+                                <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">작성일</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.regdate1}"></p> 
+                                <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">조회수</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.hit}"></p>
+                            </span>                            
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label"></label>
+                                <span class="form-control" id="exampleFormControlTextarea1" th:utext="${board.content}" disabled style="overflow-y:scroll; background-color: white; height: 300px;"/></span>
+                            </div>
+                            <hr />
+                            <p><i class="bi bi-image-fill"></i> 첨부된 이미지</p>
+                            <div th:each="obj, idx : ${image}" style="display: inline-block ;">
+                                <a th:href="@{/qboardimage/image(no=${obj.no})}" onClick="window.open(this.href, '', 'width=700, height=500');return false;">
+                                    <img th:src="@{/qboardimage/image(no=${obj.no})}" style=" width:200px; height:200px;">
+                                </a>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div style="text-align: center;">
+                                <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/home.do}">목록으로 돌아가기</a>
+                                <div th:if="${board.userid == userid}" style="display: inline-block;">
+                                    <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/update.do(no=${board.no})}">수정하기</a>
+                                    <form th:action="@{/qboard/delete.do}" method="post" enctype="multipart/form-data" style="display:inline;" id="form">
+                                        <input type="hidden" class="form-control" id="exampleFormControlInput1" th:value="${board.no}" name="no" readonly/>
+                                        <input type="button" class="btn btn-primary rounded-pill py-3 px-5" value="삭제" th:onclick="|javascript:deleteAction()|"/>
+                                    </form>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <!-- 비공개글인데 유저 본인이거나 유저가쓴글에 비밀글으로 댓글이 달렸을 때 admin일때는 보인다 -->
+            <div class="tab-content" th:if="${session.LOGIN != null} and ${board.password == 'N'}"> 
+                <div th:if="${board.userid == userid}  or ${board.originuserid == userid}">
+            <!-- and ${board.userid == userid} or ${userid.equals('admin')} or ${board.originuserid == userid} -->
+                    <div id="tab-1" class="tab-pane fade show p-0 active" style="border-radius: 30px; border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; ">
+                            <h1 class="display-5 mb-3 headerfont">문의게시판</h1>
+                        </div>
+                        <div class="row g-5 justify-content-center">
+                            <div class="col-lg-10 col-md-12 wow fadeInUp" >
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">제목</span>
+                                    <input type="text" class="form-control" th:value="${board.title}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;" /> 
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">작성자</span>
+                                    <input type="text" class="form-control" th:value="${board.userid}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;"/> 
+                                </div>
+                                <span>
+                                    <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">작성일</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.regdate1}"></p> 
+                                    <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">조회수</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.hit}"></p>
+                                </span>                            
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label"></label>
+                                    <span class="form-control" id="exampleFormControlTextarea1" th:utext="${board.content}" disabled style="overflow-y:scroll; background-color: white; height: 300px;"/></span>
+                                </div>
+                                <hr />
+                                <p><i class="bi bi-image-fill"></i> 첨부된 이미지</p>
+                                <div th:each="obj, idx : ${image}" style="display: inline-block ;">
+                                    <a th:href="@{/qboardimage/image(no=${obj.no})}" onClick="window.open(this.href, '', 'width=700, height=500');return false;">
+                                        <img th:src="@{/qboardimage/image(no=${obj.no})}" style=" width:200px; height:200px;">
+                                    </a>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <div style="text-align: center;">
+                                    <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/home.do}" style="font-size: 0.9em; font-family:맑은 고딕;"><i class="bi bi-arrow-left-square"></i> 목록으로 돌아가기</a>
+                                    <div th:if="${board.userid == userid}" style="display: inline-block;">
+                                        <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/update.do(no=${board.no})}" style="font-size: 0.9em; font-family:맑은 고딕;"><i class="bi bi-cursor"></i> 수정하기</a>
+                                        <form th:action="@{/qboard/delete.do}" method="post" enctype="multipart/form-data" style="display:inline;" id="form">
+                                            <input type="hidden" class="form-control" id="exampleFormControlInput1" th:value="${board.no}" name="no" readonly/>
+                                            <input type="button" class="btn btn-primary rounded-pill py-3 px-5" style="font-size: 0.9em; font-family:맑은 고딕;" value="삭제" th:onclick="|javascript:deleteAction()|"/>
+                                        </form>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <!-- 비공개글인데 유저 본인이 아니거나 원글쓴이도 유저본인이 아닐 때 -->
+            <div class="tab-content" th:if="${board.password == 'N'} and ${board.userid != userid} and ${board.originuserid != userid} and ${session.LOGIN != null}">
+                <div id="tab-1" class="tab-pane fade show p-0 active" style="border-radius: 30px; border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 1000px; ">
+                        <h4 style="font-family:맑은 고딕">비공개 글은 작성자와 관리자만 열람할 수 있습니다.</h4>
+                        <br/>
+                        <br/>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" style="font-size: 0.8em; font-family:맑은 고딕" th:href="@{/qboard/home.do}">목록으로 돌아가기</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 비로그인상태에서 비밀글을 눌렀을 때 -->
+            <div class="tab-content" th:if="${session.LOGIN == null} and ${board.password == 'N'}">
+                <div id="tab-1" class="tab-pane fade show p-0 active" style="border-radius: 30px; border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 1000px; ">
+                        <h4 style="font-family:맑은 고딕">비공개 글은 작성자와 관리자만 열람할 수 있습니다.</h4>
+                        <br/>
+                        <br/>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" style="font-size: 0.8em; font-family:맑은 고딕" th:href="@{/qboard/home.do}">목록으로 돌아가기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact End -->
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+    <script>
+        function deleteAction(){
+            const form = document.getElementById('form');
+            let result = confirm('문의가 삭제됩니다.');
+            if(result==true){
+                form.action="[[@{/qboard/delete.do}]]";
+                form.submit();
+            }
+        }
+    </script>
+</body>
+
+</html>

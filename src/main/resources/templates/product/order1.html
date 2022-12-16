@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>주문</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link th:href="@{/css/order1.css}" rel="stylesheet">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/002.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <!-- Contact Start -->
+    <div>
+        <div class="container-xxl py-6">
+            <div class="container">
+                <h1 class="display-5 mb-3 headerfont" style="text-align: center;">주문서작성</h1>
+                <p style="text-align: center;" class="fontmalgun">실시간으로 배송되는 주문서 작성입니다.</p>
+                <br/>
+                <p th:if="${session.LOGIN==null}" style="text-align: center;" class="fontmalgun">로그인이 필요한 서비스입니다.</p>
+                <div class="row g-5 justify-content-center">
+                    <form th:action="@{/order1/insert.do}" id="orderinsert" method="post" name="form" >
+                        <input type="hidden" name="cmd" value="order">
+                        <div class="basketdiv" id="basket">
+                            <div class="row head">
+                                <div class="subdiv">
+                                    <!-- <div class="check">선택</div> -->
+                                    <div class="img">이미지</div>
+                                    <div class="pname">상품명</div>
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketprice">가격</div>
+                                    <div class="num">수량</div>
+                                    <div class="sum1">합계</div>
+                                </div>
+                                <!-- <div class="subdiv"> -->
+                                    <!-- <div class="basketcmd">삭제</div> -->
+                                <!-- </div> -->
+                                <div class="split"></div>
+                            </div>
+                            <div class="row data" th:each="tmp, idx : ${ddlist}">
+                                <div class="subdiv">
+                                    <!-- <div class="check"><input type="checkbox" name="buy" th:value="${tmp.productno}" checked="" onclick="javascript:basket.checkItem();">&nbsp;</div> -->
+                                    <div class="img"><img th:src="@{${tmp.image} }" width="60"></div>
+                                    <div class="pname" style="padding: 30px;">
+                                        <span th:text="${tmp.name}"></span>
+                                        <input type="hidden" name="productno" id="productno" th:value="${tmp.productno}" >
+                                    </div>
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketprice"  style="padding: 30px;">
+                                        <span name="p_price" id="p_price1" class="p_price" th:text="|${tmp.price}원|" th:value="${tmp.price}"></span>
+                                        <!-- <input type="text" name="p_price" id="p_price1" class="p_price" th:value="${tmp.price}"> -->
+                                        <input type="hidden" name="price" th:value="${tmp.price}">
+                                    </div>
+                                    <div class="num" >
+                                        <div class="updown" style="padding: 20px;">
+                                            <span name="quantity" style="color: black;" th:id="p_num+${idx.count}" class="p_num" th:text="${tmp.CNT}" th:onkeyup="|javascript:basket.changePNum('${idx.count}')|"></span>
+                                            <input type="hidden" name="quantity" th:id="p_num+${idx.count}" size="2" maxlength="4" class="p_num" th:value="${tmp.CNT}" th:onkeyup="|javascript:basket.changePNum('${idx.count}')|">
+                                        </div>
+                                    </div>
+                                        <div class="sum" style="width: auto; padding:30px;" th:text="|${tmp.SUM}원|"></div> 
+                                </div>
+                                <!-- <div class="subdiv">
+                                    <div class="basketcmd" style="padding: 20px;"><input type="button" class="abutton" value="삭제" th:onclick="|javascript:basket.delItem('${tmp.productno}')|"></div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="bigtext right-align sumcount" th:text="|전체 상품 개수|" style="display:inline;"></div>
+                            <div class="bigtext right-align sumcount" id="sum_p_num" th:text="|${cnt}개|" style="display:inline;"></div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="bigtext right-align box blue summoney" th:text="|총 결제금액|" style="display:inline;"></div>
+                            <div class="bigtext right-align box blue summoney" name="sum_p_price" id="sum_p_price" th:text="|${sum}원|" style="display:inline;"></div>
+                            <input type="hidden" name="tprice" id="sum_p_price" th:value="${sum}">
+                        </div>
+                        <br/>
+        <!-- 장바구니끝 -->
+                        <div style="border: 1px solid rgba(168, 157, 157, 0.61);" class="container"  >
+                            <br/>
+                            <br/>
+                            <!-- <div  th:each="tmp, idx : ${member}"> -->
+                                <h3 style="text-align: center;" class="fontmalgun">배송정보입력</h3>
+                                <br/>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;" class="fontmalgun">받으시는분</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" th:value="${member.name}" name="name">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;" class="fontmalgun">휴대폰번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="phone" name="phone" th:value="${member.phone}">
+                                    </div>
+                                </div>
+                            <!-- </div> -->
+                            <span th:if="${adresslist == null}">
+                                <!-- <a th:href="@{/address/home.do}" onClick="window.open(this.href, '', 'width=600, height=500');return false;"><button class="abutton">주소록 관리</button></a>  -->
+                                <br/>
+                                <br/>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">우편번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="sample6_postcode" name="post" placeholder="우편번호" style="width: 150px; display:inline;" readonly>
+                                        <input type="button" onclick="sample6_execDaumPostcode()" value="주소찾기">
+                                        <input type="button"  value="주소목록" data-bs-toggle="modal" data-bs-target="#addressModalForm">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">주소</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소" style="width: 400px;" readonly> 
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">상세주소</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="address2" id="sample6_detailAddress" placeholder="상세주소" style="width: 400px; display:inline;">
+                                        <input type="text" class="form-control" name="address3" id="sample6_extraAddress" placeholder="참고항목" style="width: 150px;" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">요청사항</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="msg">
+                                        <input type="hidden" class="form-control" name="type" value="1">
+                                    </div>
+                                </div>
+                            </span>
+                            <span th:if="${adresslist != null}">
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">우편번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="sample6_postcode" th:value="${adresslist.post}" name="post" style="width: 150px; display:inline;" readonly>
+                                        <input type="button" onclick="sample6_execDaumPostcode()" value="주소찾기">
+                                        <input type="button" value="주소목록" data-bs-toggle="modal" data-bs-target="#addressModalForm">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">주소</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="address" id="sample6_address" th:value="${adresslist.address}" style="width: 400px;" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">상세주소</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="address2"  id="sample6_detailAddress" th:value="${adresslist.address2}" style="width: 400px; display:inline;">
+                                        <input type="text" class="form-control" name="address3"  id="sample6_extraAddress" th:value="${adresslist.address3}" style="width: 150px;" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label style="width: 150px;">요청사항</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="msg">
+                                        <input type="hidden" class="form-control" name="type" value="1">
+                                    </div>
+                                </div>
+                            </span>
+                                        
+                            <div class="mb-3 row">
+                                <label style="width: 150px;">결제수단</label>
+                                <div class="col-sm-10">
+                                    <input type="radio" name="payment" id = "kakaopay" class="pay" th:value = "kakao"/>
+                                    <img th:src="@{/img/payment_icon_yellow_small.png}" style="width: 80px;" alt="">
+                                    <input type="radio" name="payment" id = "naverpay" th:value = "naver"/>
+                                    <img th:src="@{/img/npay.png}" style="width: 70px;"  alt="">                                        
+                                </div>
+                            </div>
+                            <div style="text-align:center;">
+                                <input type="button" class="btn btn-primary rounded-pill py-3 px-5" value="결제하기" th:onclick="checkorder()" />
+                            </div>
+                            <br/>
+                            <br/>
+                        </div>
+                        <br/>
+                        <br/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 주소목록 Modal -->
+    <div class="modal fade" id="addressModalForm" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div class="modal-content">
+              <!-- Login Form -->
+              <div class="modal-header">
+                <h5 class="modal-title fontmalgun">주소목록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                    <table class="table table-hover" style="vertical-align: middle;">
+                        <thead>
+                            <th>우편번호</th>
+                            <th>주소</th>
+                            <th>상세주소</th>
+                            <th>참고사항</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr th:each="tmp, idx : ${addresslist}">
+                                <td th:text="${tmp.post}"></td>
+                                <td th:text="${tmp.address}"></td>
+                                <td th:text="${tmp.address2}"></td>
+                                <td th:text="${tmp.address3}"></td>
+                                <td>
+                                    <input type="button" th:id="${tmp.post}" th:id1="${tmp.address}" th:id2="${tmp.address2}" th:id3="${tmp.address3}" value="설정" th:onclick="addressselect(this.getAttribute('id') ,this.getAttribute('id1'), this.getAttribute('id2'), this.getAttribute('id3'))" data-bs-dismiss="modal" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <div class="modal-footer pt-4">
+                </div> 
+          </div>
+        </div>
+    </div>
+    <!--주소목록 modal end-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        
+        // 휴대폰번호 "-" 자동입력
+        let isphoneValid=false;
+        document.querySelector("#phone").addEventListener('input', function(){
+            let regExp = /^(010)-?[0-9]{4}-?[0-9]{4}$/;
+            // 1. 입력한 value의 값을 불러온다.
+            // 하이픈 자동입력
+            inputphone = this.value
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+            this.value = inputphone;
+        });
+        
+        
+        // 유효성검사시작
+        function checkorder(){
+            let radio = $('input[name="payment"]:checked').val();
+
+            let regExp = /^(010)-?[0-9]{4}-?[0-9]{4}$/;
+            // alert(radio);
+            if(radio==undefined){
+                alert('결제수단을 선택해주세요.');
+                return;
+            }
+
+            let form = document.form;
+            if(form.name.value == ""){
+                alert('받는분을 입력해주세요.');
+                form.name.select();
+                form.name.focus();
+                return;
+            }
+
+            if(form.phone.value == ""){
+                alert('휴대폰 번호를 입력해주세요.');
+                form.phone.select();
+                form.phone.focus();
+                return;
+            }
+            if(form.post.value == ""){
+                alert('주소를 입력해주세요.');
+                form.post.select();
+                form.post.focus();
+                return;
+            }
+            if(form.address.value == ""){
+                alert('주소를 입력해주세요.');
+                form.address.select();
+                form.address.focus();
+                return;
+            }
+            if(form.address2.value == ""){
+                alert('상세주소를 입력해주세요.');
+                form.address2.select();
+                form.address2.focus();
+                return;
+            }
+            if(!regExp.test(document.getElementById('phone').value)){
+                alert('연락처를 양식에 맞게 입력해주세요.(ex. 01011112222)');
+                form.phone.select();
+                form.phone.focus();
+                return;
+            }
+            form.submit();
+
+        }
+
+        // 주소찾기 시작
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+    
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+    
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+    
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("sample6_extraAddress").value = extraAddr;
+                    
+                    } else {
+                        document.getElementById("sample6_extraAddress").value = '';
+                    }
+    
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    document.getElementById("sample6_address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+
+        // 배송지 목록에서 선택
+        const addressselect = (post ,address, address2, address3) => {
+            // console.log(post + address + address2 + address3 );
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('sample6_postcode').value = post;
+            document.getElementById("sample6_address").value = address;
+            document.getElementById("sample6_detailAddress").value = address2;
+            document.getElementById("sample6_extraAddress").value = address3;
+        }
+
+        // 총금액 콤마찍기
+        var money = document.getElementsByName("sum_p_price")[0].innerHTML.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        // console.log(money);
+        var mmoney = document.getElementsByName("sum_p_price");
+        mmoney[0].innerHTML=money;
+
+        // 테이블 내 숫자 콤마찍기
+        var price = document.getElementsByName("p_price");
+        // var output = document.getElementsByClassName("output");
+        var pprice = document.getElementsByClassName("p_price");
+        var sum = document.getElementsByClassName("sum");
+
+        for(i=0; i<sum.length; i++){
+            price2 = price[i].innerHTML.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+            sum2 = sum[i].innerHTML.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+            // console.log(price2+"price2");
+            // output[i].innerHTML=price2
+            pprice[i].innerHTML=price2
+            sum[i].innerHTML=sum2
+        }
+    </script>
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+</body>
+
+</html>

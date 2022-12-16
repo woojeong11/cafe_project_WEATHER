@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>주문완료내역</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <div class="container-xxl py-6 border" style="margin-top: 100px;">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-10 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-5 mb-3 headerfont">주문완료내역</h1>
+                <p style="text-align: center;">주문완료 상품들입니다.</p>
+                <hr />
+                <div th:each="tmpp , idx : ${list}">
+                    <div class="border my-3">
+                        <br />
+                        <div>
+                            <strong class="fontmalgun text-start" th:text="| 결제번호 : ${tmpp[0].paycode}|"></strong>
+                            <strong class="fontmalgun text-end" style="margin-left: 100px;"  th:text="| 총금액 : ${tmpp[0].tprice}원|"></strong>
+                        </div>
+                        <div th:each="tmp, idx : ${tmpp}">
+                            <div class="border my-3 mx-auto"  style="max-width: 500px;">
+                                <span style="font-weight: bold; color: #111111; font-size: 20px; float: left; margin-top: 10px; margin-left: 35px;">주문완료</span>
+                                <br />
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <img th:src="@{${tmp.productimageurl} }" style="width: 100%; " alt="">
+                                    </div>
+                                    <div class="col-sm-6" style="text-align: left;">
+                                        <h5 class="fontmalgun" style="top: 25%; position: relative;" th:text="${tmp.productname}"></h5>
+                                        <br />
+                                        <div style="margin-top: 20px;">
+                                            <p style="float: left;" th:text="${tmp.price*tmp.quantity + '원  '}"></p>
+                                            <p style="float: left; margin-left: 20px;" th:text="${tmp.quantity + '개'}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div style="top: 25%; position: relative;">
+                                            <a th:href="@{/member/orderinfo/selectone.do(productno=${tmp.productno}, type=${tmp.type}, paycode=${tmp.paycode}, userid=${tmp.userid})}"><button style="border-radius: 10px;" class="btn btn-outline-dark">상세보기</button></a>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="height:1px; border:0; background:rgb(106, 106, 106);"/>
+
+                <div style="font-size: 1.5em; text-align: center;" >
+                    <th:block th:each="i : ${#numbers.sequence(1, pages)}" style="margin: auto;">
+                        <a th:href="@{/member/orderinfo/complete.do(page=${i})}" th:text="${i}"></a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.QboardImageMapper">
+
+<insert id="insertImage" parameterType="com.example.dto.QboardImageDTO">
+        INSERT INTO QBOARDIMAGETBL(NO ,QBOARDNO ,IMAGENAME ,IMAGESIZE ,IMAGETYPE ,IMAGEDATA ,REGDATE)
+        VALUES(SEQ_QBOARDIMAGE_NO.NEXTVAL,#{qboardno},#{imagename},#{imagesize},#{imagetype},#{imagedata},CURRENT_TIMESTAMP)
+</insert>
+
+<!-- 이미지목록 -->
+<select id="selectimageList" parameterType="long" resultType="com.example.dto.QboardImageDTO">
+        SELECT I.NO FROM QBOARDIMAGETBL I WHERE I.QBOARDNO=#{qboardno}
+</select>
+
+<!-- 이미지게시물1개선택 -->
+<resultMap id="retMap1" type="com.example.dto.QboardImageDTO">
+        <result property="imagedata" column="IMAGEDATA" 
+        jdbcType="BLOB" javaType="[B" />
+</resultMap>
+<select id="selectImageOne" parameterType="long" resultMap="retMap1">
+        SELECT I.* FROM QBOARDIMAGETBL I WHERE I.NO=#{no}
+</select>
+
+<!-- 글번호로 이미지일괄삭제 -->
+<delete id="deleteQboardImage" parameterType="long">
+        DELETE FROM QBOARDIMAGETBL WHERE QBOARDNO=#{no}
+</delete>
+
+<!-- 이미지1개삭제 -->
+<delete id="deleteImageOne" parameterType="long">
+        DELETE FROM QBOARDIMAGETBL WHERE NO=#{no}
+</delete>
+</mapper>

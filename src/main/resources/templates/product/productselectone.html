@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>물품상세</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link th:href="@{/css/productfont.css}" rel="stylesheet">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+    <style>
+        .cococo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        font-family: 'NanumBarunGothic', sans-serif;
+        }
+        .coco {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/004.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <!-- About Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-5 align-items-center">
+                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                        <div th:each="obj, idx : ${image}">
+                            <img class="img-fluid w-100" th:src="@{/productimage/image(no=${obj.no})}"  style="width: 100px;" >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s" >
+                        <h1 class="display-5 mb-3 headerfont" th:text="${pro.name}"></h1>
+                        <hr/>
+                        <input type="hidden" name="productno" id="productoneno" th:value="${pro.no}">
+                        <div class="nanumbarungothic" >
+                            <p class="mb-4" th:text="${pro.content}"></p>
+                        </div>
+                        <hr/>
+                        <fieldset>
+                            <legend class="nanumbarungothic" style="font-size: 1em;">제품 영양 정보</legend>
+                            <!-- <hr/> -->
+                                <div class="cococo">
+                                    <div class="coco">
+                                        <ul>
+                                        <li>
+                                            <dl>
+                                                <dt>1회 제공량 (kcal)</dt>
+                                                <dd>350</dd>
+                                            </dl>
+                                        </li>
+                                            <li>
+                                            <dl>
+                                                <dt>포화지방 (g)</dt>
+                                                <dd>9</dd>
+                                            </dl>
+                                        </li>
+                                        <li>
+                                            <dl>
+                                                <dt>단백질 (g)</dt>
+                                                <dd>8</dd>
+                                            </dl>
+                                        </li>
+                                    </div>
+                                    <div class="coco">
+                                        <li class="fat" style="display:none;">
+                                            <dl>
+                                                <dt>지방 (g)</dt>
+                                                <dd></dd>
+                                            </dl>
+                                        </li>
+                                        <li style="display:none;">
+                                            <dl>
+                                                <dt>트랜스지방 (g)</dt>
+                                                <dd></dd>
+                                            </dl>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            <dl>
+                                                <dt>나트륨 (mg)</dt>
+                                                <dd>130</dd>
+                                            </dl>
+                                        </li>
+                                        <li>
+                                            <dl>
+                                                <dt>당류 (g)</dt>
+                                                <dd>29</dd>
+                                            </dl>
+                                        </li>
+                                        <li>
+                                            <dl>
+                                                <dt>카페인 (mg)</dt>
+                                                <dd>155</dd>
+                                            </dl>
+                                        </li>
+                                        <li style="display:none;">
+                                            <dl>
+                                                <dt>콜레스테롤 (mg)</dt>
+                                                <dd>gfgfg</dd>
+                                            </dl>
+                                        </li>
+                                        <li style="display:none;">
+                                            <dl>
+                                                <dt>탄수화물 (g)</dt>
+                                                <dd>ffsfdfdsf</dd>
+                                            </dl>
+                                        </li>
+                                    </div>
+                                    </ul>
+                                </div>
+                        </fieldset>
+                        <select id="quantity11" class="form-select" aria-label="Default select example" style="width: 130px;">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                        <div class="nanumbarungothic">
+                            <input class="btn btn-primary rounded-pill py-3 px-5 mt-3" type="submit" id="productonecartbtn" value="장바구니 담기" / >
+                        </div>
+                        <!-- <input type="submit" class="btn btn-primary rounded-pill py-3 px-5 mt-3" value="삭제"/> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- About End -->
+    
+    
+    <!-- Firm Visit Start -->
+    <!-- <div class="container-fluid bg-primary bg-icon mt-5 py-6">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-md-7 wow fadeIn" data-wow-delay="0.1s">
+                    <h1 class="display-5 text-white mb-3">Visit Our Firm</h1>
+                    <p class="text-white mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos.</p>
+                </div>
+                <div class="col-md-5 text-md-end wow fadeIn" data-wow-delay="0.5s">
+                    <a class="btn btn-lg btn-secondary rounded-pill py-3 px-5" href="">Visit Now</a>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Firm Visit End -->
+
+
+    <!-- Feature Start -->
+    <!-- <div class="container-fluid bg-light bg-icon py-6"> -->
+        <div class="container">
+            <br/>
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <br/>
+                <h1 class="nanumbarungothic">추천메뉴</h1>
+                <p class="nanumbarungothic">더 많은 메뉴들이 준비되어있어요!</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s" th:each="tmp, idx : ${random}">
+                    <div class="bg-white text-center h-100 p-4 p-xl-5">
+                        <img class="img-fluid mb-4" th:src="@{${tmp.image} }" style="width: 300px; height:400px;">
+                        <p class="nanumbarungothic" style="font-size: 1.5em;" th:text="${tmp.name}"></p>
+                        <p class="nanumbarungothic" style="height: 60px;" th:text="${tmp.content}"></p>
+                        <input type="hidden" name="serveproductno" th:value="${tmp.no}">
+                        <input type="hidden" name="quantity" value="1">
+                        <div class="nanumbarungothic">
+                            <a class="btn btn-outline-primary border-2 py-2 px-4 rounded-pill" th:href="@{/product/productone.do?(no=${tmp.no})}">자세히보기</a>
+                            <input class="btn btn-outline-primary border-2 py-2 px-4 rounded-pill" type="submit" name="servemenucartbtn" value="장바구니 담기" / >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Feature End -->
+
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        document.getElementById('productonecartbtn').addEventListener('click', function(){
+            
+            var url     = `[[@{/rest/recommend/insert.json}]]`;
+            var body    = {
+                productno : document.getElementById('productoneno').value,
+                quantity  : document.getElementById('quantity11').value
+            };
+            
+            axios.post(url, body).then(function(response){
+                console.log(response);
+                if(response.data.status == 200){
+                    alert('성공적으로 카트에 담겼습니다.');
+
+                    const url1 = `[[@{/rest/cart/count.json}]]`;
+
+                    axios.get(url1).then(function(response){
+                        console.log(response);
+                        document.getElementById('cartcount').innerText = response.data;
+                        document.getElementById('cartcount1').innerText = response.data;
+                    });
+                }
+            });
+        });
+
+        var serveproductno      = document.getElementsByName('serveproductno');
+        var servemenucartbtn    = document.getElementsByName('servemenucartbtn');
+
+        for(let i=0; i<servemenucartbtn.length; i++){
+            servemenucartbtn[i].addEventListener('click', function(){
+                var url     = `[[@{/rest/recommend/insert.json}]]`;
+                var body    = {
+                    productno : serveproductno[i].value
+                };
+                
+                axios.post(url, body).then(function(response){
+                    console.log(response);
+                    if(response.data.status == 200){
+                        alert('성공적으로 카트에 담겼습니다.');
+    
+                        const url1 = `[[@{/rest/cart/count.json}]]`;
+    
+                        axios.get(url1).then(function(response){
+                            console.log(response);
+                            document.getElementById('cartcount').innerText = response.data;
+                            document.getElementById('cartcount1').innerText = response.data;
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+    
+</body>
+
+</html>

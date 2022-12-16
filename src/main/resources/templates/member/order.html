@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>주문현황</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/006.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <!-- Page Header End -->
+    <div class="container-xxl py-3 border" style="margin-top: 100px;">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-10 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-5 mb-3 headerfont">주문내역</h1>
+                <p style="text-align: center;">현재 주문 중인 상품들입니다.</p>
+                <hr />
+                <div th:each="tmpp , idx : ${list}">
+                    <div class="border my-3">
+                        <br />
+                        <div>
+                            <strong class="fontmalgun text-start" th:text="| 결제번호 : ${tmpp[0].paycode}|"></strong>
+                            <strong class="fontmalgun text-end" style="margin-left: 100px;"  th:text="| 총금액 : ${tmpp[0].tprice}원|"></strong>
+                            <br />
+                        </div>
+                        <div>
+                            <button type="submit" style="margin-left: 390px;border-radius: 10px; margin-top: 10px;" class="btn btn-outline-dark" th:id="${tmpp[0].paycode}" th:onclick="cancelAction(this.getAttribute('id'))">주문취소</button>
+                        </div>
+                        <div th:each="tmp, idx : ${tmpp}">
+                            <div class="border my-3 mx-auto" style="max-width: 500px;">
+                                <span style="font-weight: bold; color: #111111; font-size: 20px; float: left; margin-top: 10px; margin-left: 35px;">배달중</span>
+                                <br />
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <img th:src="@{${tmp.productimageurl} }" style="width: 100%; " alt="">
+                                    </div>
+                                    <div class="col-sm-6" style="text-align: left;">
+                                        <h5 class="fontmalgun" style="top: 25%; position: relative;" th:text="${tmp.productname}"></h5>
+                                        <br />
+                                        <div style="margin-top: 20px;">
+                                            <p style="float: left;" th:text="${tmp.price*tmp.quantity + '원  '}"></p>
+                                            <p style="float: left; margin-left: 20px;" th:text="${tmp.quantity + '개'}"></p>
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-3">
+                                            <div style="top:40%; position: relative;">
+                                                <a th:href="@{/member/orderinfo/selectone.do(productno=${tmp.productno}, type=${tmp.type}, paycode=${tmp.paycode}, userid=${tmp.userid})}"><button style="border-radius: 10px;" class="btn btn-outline-dark">상세보기</button></a>
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="height:1px; border:0; background:rgb(106, 106, 106);"/>
+
+                <div style="font-size: 1.5em; text-align: center;" >
+                    <th:block th:each="i : ${#numbers.sequence(1, pages)}" style="margin: auto;">
+                        <a th:href="@{/member/orderinfo/ing.do(page=${i})}" th:text="${i}"></a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        const cancelAction = (code) => {
+            console.log(code);
+
+            if(confirm('주문을 취소하시겠습니까?')){
+                // param page 값
+                const urlParams = new URL(location.href).searchParams;
+
+                const params = urlParams.get('page');
+                var page = params;
+                if(params == null){
+                    page = 1
+                }
+                console.log(page);
+
+                // csrf 검증용 토큰
+                var header = $("meta[name='_csrf_header']").attr('content');
+                var token = $("meta[name='_csrf']").attr('content');
+
+                const form = document.createElement("form");
+                form.setAttribute("action", "[[@{/order1/cancel.do}]]");
+                form.setAttribute("method", "post");
+
+                // <input type="hidden" value="13" name="no"
+                const input1 = document.createElement("input");
+                input1.setAttribute("type", "hidden");
+                input1.setAttribute("name","code");
+                input1.setAttribute("value", code);
+
+                const input2   = document.createElement('input');
+                input2.setAttribute("type", "hidden");
+                input2.setAttribute("name", "_csrf");
+                input2.setAttribute("value", token);
+                
+                const input3   = document.createElement('input');
+                input3.setAttribute("type", "hidden");
+                input3.setAttribute("name", "page");
+                input3.setAttribute("value", page);
+
+                form.appendChild(input1);
+                form.appendChild(input2);
+                form.appendChild(input3);
+                document.body.appendChild(form);
+                form.submit();
+                
+            }
+        }
+    </script>
+    
+</body>
+
+</html>

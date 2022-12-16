@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>결제</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+<style>
+
+
+.basketdiv {
+        width: 100%;
+        border-top: 1px solid #e0e0e0;
+        float: left;
+        font-size: 0.9375em;
+        margin-bottom: 20px;
+    }
+    .basketdiv .row.head {
+        border-bottom: 1px solid rgb(0, 0, 0);
+        box-sizing: border-box;
+        background-color: #ffffff;
+        font-weight: 500;
+    }
+    .basketdiv .data {
+        border-bottom: 1px solid rgba(90, 93, 100, 0.411);
+        box-sizing: border-box;
+        cursor: pointer;
+        float: left;
+        width: 100%;
+    }
+    .basketdiv .data .empty{
+        text-align: center;
+        padding: 12px 0;
+    }
+    .basketdiv .row.head .subdiv {
+        background-color: #ffffff2d;
+    }
+    .basketdiv .row > .subdiv {
+        display: block;
+        float: left;
+    }
+    .basketdiv .row > .subdiv:nth-child(1) {
+        width: 500px;
+    }
+    .basketdiv .row > .subdiv:nth-child(2) {
+        width: 500px;
+    }
+    .basketdiv .row > .subdiv:nth-child(3) {
+        width: 100px;
+    }
+    .basketdiv2 .row > .subdiv:nth-child(1) {
+        width: 60%;
+    }
+    .basketdiv2 .row > .subdiv:nth-child(2) {
+        width: 40%;
+    }
+    .basketdiv .row > div > div {
+        display: block;
+        float: left;
+        text-align: center;
+        margin: 0;
+        padding: 12px 0;
+    }
+    .basketdiv .row.data > div > div {
+        height: 90px;
+        line-height: 20px;
+    }
+        .basketdiv .data .num .updown {
+            color: #8fb7e5;
+            font-size: 2em;
+            letter-spacing: -5px;
+        }
+        .basketdiv .check {
+            width: 10%;
+        }
+    .basketdiv .check input[type=checkbox] {
+        transform: scale(1.5);
+    }
+    .basketdiv .img{
+        width: 20%;
+    }
+    .basketdiv .pname{
+        text-align: center;
+        width: 70%;
+    }
+    .basketdiv2 .pname {
+        text-align: center;
+        width: 50%;
+    }
+    .basketdiv .basketprice {
+        width: 30%;
+    }
+    .basketdiv .num {
+        width: 33%;
+        min-width: 105px;
+    }
+    .basketdiv .sum {
+        width: 20%;
+
+      /* max-width: 80px; */
+        color: #000000;
+    }
+    .basketdiv .point {
+        width: 50%;
+    }
+    .basketdiv2 .basketprice {
+        width: 25%;
+    }
+
+    .basketdiv2 .num {
+        width: 25%;
+    }
+
+    .basketdiv2 .sum {
+        width: 25%;
+        color: #000000;
+    }
+
+    .basketdiv2 .point {
+        width: 25%;
+    }
+    .basketdiv .basketcmd{
+        text-align: center;
+        width: 90%;
+    }
+    .basketdiv .data .pname {
+        text-align: center !important;
+      line-height: 1.2 !important;
+    }
+    .basketdiv .data .price, .basketdiv .data .sum, .basketdiv .data .point {
+        text-align: right;
+    }
+    .baseform > tbody > tr > td:first-child {
+        width: 100px;
+    }
+
+.buttongroup {
+    padding: 11px 0;
+    margin: 50px 0;
+}
+.narrowbuttongroup{
+    margin: 15px 0;
+}
+    .buttongroup.center {
+        text-align: center;
+    }
+    .buttongroup input[type=text], .buttongroup input[type=password] {
+        height: 30px;
+    }
+    .buttongroup button, .buttongroup a {
+        margin-right: 5px;
+    }
+    .buttongroup button:last-child, .buttongroup a:last-child {
+        margin-right: 0;
+    }
+
+    .abutton, .abutton:link, .abutton:visited, .abutton:active, input[type=button] {
+        background-color: #8fb7e5;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        cursor: pointer;
+        letter-spacing: -1px;
+        padding: 3px 5px;
+        margin: 2px 3px;
+        width: auto;
+        word-break: keep-all;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9375em;
+    }
+
+.abutton-alt {
+    background-color: #d3e2c6;
+}
+
+.red {
+    color:#b00;
+}
+.blue {
+  color: #8fb7e5;
+}
+.basketrowcmd, .sumcount, .summoney{
+  text-align: right;
+  margin-bottom: 10px;
+}
+.sumcount, .summoney{
+    text-align: center;
+  font-size: 1.25em;
+    font-weight: bold;
+}
+.buttongroup{
+  text-align: center;
+}
+.buttongroup a{
+  text-decoration: none;
+}
+.cmd a, .cmd span {
+    padding: 12px 30px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #000;
+    background-color: #d83030;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+.cmd.small a, .cmd.small span {
+    padding: 6px 20px;
+    font-size: 0.8125em;
+}
+
+.orderform .p_num {
+    text-align: right;
+    width: 40px;
+    font-size: 1em;
+}
+
+        .content_right{margin:20px; width:520px; padding-top:30px;}
+        .content_right h2{font-size:32px; height:50px; color:#444; line-height:1;   border-bottom:1px solid #dfdfdf;}
+        .content_right dl{display:table; width:100%; }
+        .content_right dl dt{display:table-cell; vertical-align:top; width:20%;}
+        .content_right dl dd{display:table-cell; vertical-align:top; width:80%;}
+    </style>
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <h1 class="display-3 mb-3 animated slideInDown">주문서 작성</h1>
+            <nav aria-label="breadcrumb animated slideInDown">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="text-body" th:href="@{/home.do}">홈</a></li>
+                    <li class="breadcrumb-item"><a class="text-body" th:href="@{/cart/home.do}">장바구니</a></li>
+                    <li class="breadcrumb-item text-dark active" aria-current="page">주문서</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!-- Contact Start -->
+    <div>
+        <div class="container-xxl py-6">
+            <div class="container">
+                <h1 class="display-5 mb-3" style="text-align: center;">주문서작성</h1>
+                <p style="text-align: center;">실시간으로 배송되는 주문서 작성입니다.</p>
+                <p th:if="${session.LOGIN==null}" style="text-align: center;">로그인이 필요한 서비스입니다.</p>
+                <div class="row g-5 justify-content-center">
+                    <form th:action="@{/pay/home.do}" method="get" id="form" >
+                        <input type="hidden" name="cmd" value="order">
+                        <div class="basketdiv" id="basket">
+                            <div class="row head">
+                                <div class="subdiv">
+                                    <!-- <div class="check">선택</div> -->
+                                    <div class="img">이미지</div>
+                                    <div class="pname">상품명</div>
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketprice">가격</div>
+                                    <div class="num">수량</div>
+                                    <div class="sum">합계</div>
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketcmd">삭제</div>
+                                </div>
+                                <div class="split"></div>
+                            </div>
+                            <div class="row data" th:each="tmp, idx : ${ddlist}">
+                                <div class="subdiv">
+                                    <!-- <div class="check"><input type="checkbox" name="buy" th:value="${tmp.productno}" checked="" onclick="javascript:basket.checkItem();">&nbsp;</div> -->
+                                    <div class="img"><img th:src="@{${tmp.image} }" width="60"></div>
+                                    <div class="pname" style="padding: 30px;">
+                                        <span th:text="${tmp.name}"></span>
+                                        <input type="hidden" name="productno" id="productno" th:value="${tmp.productno}" >
+                                        <input type="hidden" name="productname"  th:value="${tmp.name}" >
+                                    </div>
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketprice"  style="padding: 30px;">
+                                        <span name="p_price" id="p_price1" class="p_price" th:text="|${tmp.price}원|" th:value="${tmp.price}"></span>
+                                        <!-- <input type="text" name="p_price" id="p_price1" class="p_price" th:value="${tmp.price}"> -->
+                                        <input type="hidden" name="price" th:value="${tmp.price}">
+                                    </div>
+                                    <div class="num" >
+                                        <div class="updown" style="padding: 10px;">
+                                            <input type="text" name="quantity" th:id="p_num+${idx.count}" size="2" maxlength="4" class="p_num" th:value="${tmp.CNT}" th:onkeyup="|javascript:basket.changePNum('${idx.count}')|">
+                                            <!-- <span th:onclick="|javascript:basket.changePNum('${idx.count}')|"><i class="fas fa-arrow-alt-circle-up up"></i></span>
+                                            <span th:onclick="|javascript:basket.changePNum('${idx.count}')|"><i class="fas fa-arrow-alt-circle-down down"></i></span> -->
+                                        </div>
+                                    </div>
+                                    <div class="sum" style="padding: 15px;" th:text="|${tmp.SUM}원|"></div> 
+                                </div>
+                                <div class="subdiv">
+                                    <div class="basketcmd" style="padding: 20px;"><input type="button" class="abutton" value="삭제" th:onclick="|javascript:basket.delItem('${tmp.productno}')|"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="right-align basketrowcmd"> -->
+                            <!-- <a href="javascript:void(0)" class="abutton" th:onclick="|javascript:basket.delCheckedItem()|">선택상품삭제</a> -->
+                            <!-- <a href="javascript:void(0)" class="abutton" th:onclick="|javascript:basket.delAllItem()|">장바구니비우기</a> -->
+                        <!-- </div> -->
+                        <div style="text-align: right;">
+                            <div class="bigtext right-align sumcount" th:text="|전체 상품 개수|" style="display:inline;"></div>
+                            <div class="bigtext right-align sumcount" id="sum_p_num" th:text="|${cnt}개|" style="display:inline;"></div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="bigtext right-align box blue summoney" th:text="|총 결제금액|" style="display:inline;"></div>
+                            <div class="bigtext right-align box blue summoney" id="sum_p_price" th:text="|${sum}원|" style="display:inline;"></div>
+                            <input type="hidden" name="tprice" id="sum_p_price1" th:value="${sum}">
+                        </div>
+                        <br/>
+        <!-- 장바구니끝 -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Contact End -->
+    
+    <script>
+        let basket = {
+            totalCount: 0, 
+            totalPrice: 0,
+        
+            //재계산
+            reCalc: function(){
+                this.totalCount = 0;
+                this.totalPrice = 0;
+                document.querySelectorAll(".p_num").forEach(function (item) {
+                    if(item.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.firstElementChild.checked == true){
+                        var count = parseInt(item.getAttribute('value'));
+                        this.totalCount += count;
+                        var price = item.parentElement.parentElement.previousElementSibling.firstElementChild.getAttribute('value');
+                        this.totalPrice += count * price;
+                    }
+                }, this); // forEach 2번째 파라메터로 객체를 넘겨서 this 가 객체리터럴을 가리키도록 함. - thisArg
+            },
+            //화면 업데이트
+            updateUI: function () {
+                document.querySelector('#sum_p_num').textContent =  this.totalCount.formatNumber() + '개';
+                document.querySelector('#sum_p_price').textContent =  this.totalPrice.formatNumber() + '원';
+
+
+            },
+
+            delItem: function (productno) {
+                alert('항목이 삭제됩니다.');
+                const form = document.getElementById('form');
+                form.action="[[@{/cart/delete.do}]]";
+                form.submit();
+                // event.target.parentElement.parentElement.parentElement.remove();
+                this.reCalc();
+                this.updateUI();
+                
+            }
+        }
+         // 숫자 3자리 콤마찍기
+         Number.prototype.formatNumber = function(){
+            if(this==0) return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/; 
+            let nstr = (this + '');
+            while (regex.test(nstr)) nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            return nstr;
+        };
+
+    </script>
+
+    <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script>
+    <script>
+        var paybtn = document.getElementById('paybtn');
+
+        var oPay = Naver.Pay.create({
+              "mode" : "production", // development or production
+              "clientId": "u86j4ripEt8LRfPGzQ8" // clientId
+        });
+        
+        var productname = document.getElementsByName('productname');
+        var productno   = document.getElementsByName('productno');
+        var total_Amount= document.getElementById('sum_p_price1');
+        window.addEventListener('load', function(){
+            oPay.open({
+              "merchantUserKey": "user",
+              "merchantPayKey": productno[0].value,
+              "productName": productname[0].value + " 그외 " + (productname.length-1) ,
+              "totalPayAmount": total_Amount.value,
+              "taxScopeAmount": total_Amount.value,
+              "taxExScopeAmount": "0",
+              "returnUrl": "http://3.38.209.149:8080/TEST202/pay/naver/paying.do"
+            });
+
+        });
+    </script>
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+</body>
+
+</html>

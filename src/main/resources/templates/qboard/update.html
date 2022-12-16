@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>문의수정</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+    <style>
+        #container {
+            width: 1000px;
+            margin: 20px auto;
+        }
+        .ck-editor__editable[role="textbox"] {
+            /* editing area */
+            min-height: 200px;
+        }
+        .ck-content .image {
+            /* block images */
+            max-width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+
+    <!-- 메인이미지 -->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/002.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="row g-0 gx-5 align-items-end">
+                <div class="col-lg-6"></div>
+            </div>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active" style="border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                        <h1 class="display-5 mb-3 headerfont">수정하기</h1>
+                        <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                    </div>
+                    <div class="row g-5 justify-content-center">
+                        <div class="col-lg-10 col-md-12 wow fadeInUp">
+                            <form th:action="@{/qboard/update.do}" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">제목</span>
+                                    <input type="text" class="form-control" name="title" th:value="${board123.title}" aria-label="Username" aria-describedby="basic-addon1" /> 
+                                    <input type="hidden" name="no" th:value="${board123.no}">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">작성자</span>
+                                    <input type="text" class="form-control" th:value="${board123.userid}" aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;"/> 
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label"><i class="bi bi-check2-square"  ></i> 내용</label>
+                                    <!-- <textarea class="form-control" id="editor"  rows="6" name="content" th:text="${board123.content}"></textarea> -->
+                                    <textarea id="editor" name="content" th:text="${board123.content}" class="CKEditor"></textarea>
+                                </div>
+                                    <br/>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label"><i class="bi bi-check2-square"></i> 사진추가</label>
+                                    <input type="file" class="form-control" id="exampleFormControlInput1" name="file">
+                                </div>
+                                <!-- <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label"><i class="bi bi-check2-square"></i>파일첨부</label>
+                                    <input type="file" class="form-control" id="exampleFormControlInput1" name="file">
+                                </div> -->
+                                <br/>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label"><i class="bi bi-check2-square"></i> 문의공개여부</label>
+                                    <p style="font-size: 0.8em;">비공개로 설정하면 작성자와 관리자만 내용을 열람할 수 있습니다.</p>
+                                    &nbsp;&nbsp;<input type="radio" name="password" value="Y" class="radio" th:checked="${(board123.password.equals('Y'))}" /><span class="ml_10">공개</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="password" value="N" class="radio" th:checked="${(board123.password.equals('N'))}"/><span class="ml_10">비공개</span>
+                                    <br/>
+                                </div>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-primary rounded-pill py-3 px-5" type="submit"><i class="bi bi-cursor"></i> 수정완료</button>
+                                    <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/home.do}"><i class="bi bi-arrow-left-square"></i> 목록</a>
+                                </div>
+                                <br/>
+                                <br/>
+                            </form>
+                            <label for="exampleFormControlInput1" class="form-label"><i class="bi bi-check2-square"></i> 등록된 이미지</label>
+                            <br/>
+                            <div th:each="obj, idx : ${image}" style="display: inline-block ; ">
+                                <img th:src="@{/qboardimage/image(no=${obj.no})}" style=" width:200px; height:200px; padding: 20px;">
+                                <form th:action="@{/qboardimage/delete.do}" method="post" style="display:inline-block">
+                                    <input type="hidden" th:value="${obj.no}" name="no" />
+                                    <input type="hidden" th:value="${board123.no}" name="boardno" />
+                                <button style="border: 0px ;"><i class="bi bi-trash3"></i> </button>
+                            </form>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact End -->
+
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.3.1/classic/ckeditor.js"></script>    
+    <script>
+    ClassicEditor.create( document.querySelector( '#editor' ), {
+        // placeholder: 'Welcome to CKEditor 5!',
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        htmlSupport: {
+            allow: [
+                {
+                    name: /.*/,
+                    attributes: true,
+                    classes: true,
+                    styles: true
+                }
+            ]
+        },
+
+        removePlugins: [ 'Heading' ],
+        language: "ko",
+        height: "50px",
+        allowedContent : true,
+        htmlEncodeOutput : false
+    } );
+        
+    </script>
+</body>
+
+</html>

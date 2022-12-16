@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-물품사진관리</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+    <!-- 메인이미지 -->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Blog Start -->
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3 headerfont">사진등록</h1>
+                <form th:action="@{/productimage/insert.do}" method="post" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="no" th:value="${obj}" readonly>
+                                <label for="name">아이템 번호</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" th:value="${pro.name}" readonly>
+                                <label for="email">아이템 이름</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="file" class="form-control" name="file">
+                                <label for="subject">등록할 이미지 선택</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="submit" class="btn btn-primary rounded-pill py-3 px-5" value="이미지등록">
+                            </div>
+                        </div>
+                        <br/>
+                        <hr/>
+                    </div>
+                </form>
+            <div class="col-lg-4 col-md-6 wow fadeInUp"  th:each="tmp, idx : ${image}">
+                <form th:action="@{/productimage/delete.do}" method="post">
+                    <img class="img-fluid" th:src="@{/productimage/image(no=${tmp.no})}" alt="" />
+                    <div class="bg-light p-4">
+                        <a class="d-block h5 lh-base mb-4" href="" th:text="${tmp.no}"></a>
+                        <input type="hidden" class="form-control" name="no" th:value="${tmp.no}" readonly>
+                        <input type="hidden" class="form-control" name="productno" th:value="${obj}" readonly>
+                        <div class="text-muted border-top pt-4">
+                            <small class="me-3"><input type="submit" class="btn btn-primary rounded-pill py-3 px-5" value="삭제"></small>
+                            <!-- <small class="me-3"><i class="fa fa-calendar text-primary me-2"></i>01 Jan, 2045</small> -->
+                        </div>
+                    </div>
+                </form>
+            </div>           
+            <hr/>
+            <br/>
+            
+            <form th:action="@{/productimage/deletebatch.do}" method="post">
+                <input type="hidden" class="form-control" name="productno" th:value="${obj}" readonly>
+                <br/>
+                <br/>
+                <small class="me-3"><input type="submit" class="btn btn-primary rounded-pill py-3 px-5" value="사진일괄삭제"></small>
+            </form>
+                
+           
+        </div>
+    </div>
+</div>
+    <!-- Blog End -->
+
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+</body>
+
+</html>

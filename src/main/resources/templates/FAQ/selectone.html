@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <link th:href="@{/css/FAQselectone.css}" rel="stylesheet">
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+ 
+    <title>FAQ 상세페이지</title>
+</head>
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+  
+
+
+
+
+
+
+    <div class="container1" >
+        <CENTER>
+        <!-- <h2 style="text-align: center; padding-top: 50px;">FAQ 자주묻는질문</h2> -->
+        <div style="padding-top: 100px;">
+            <div  class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; min-width: 300px;">
+                <h1 class="display-5 mb-3 fontmalgun">FAQ 자주묻는질문</h1>
+            </div>
+        </div>
+        <table class="type04" style=" width: 800px;">
+            
+        <tbody>
+            <tr>
+                <th>등록일</th>
+                <input type="hidden" th:value="${obj.no}">
+                <input type="hidden" th:value="${obj.rown}">
+                <!-- <td th:text="${obj.rown}"></td> -->
+                <td th:text="${obj.regdate1}"></td>
+            </tr> 
+            <tr> 
+                <th><h2 style="padding-top: 0px;">Q</h2></th><br>
+                <td colspan="2" style="height: auto;" th:text="${obj.title}">제목</th>
+            </tr>
+            <tr>
+                <th><h2>A</h2></th><br>
+                <td><pre colspan="2"style="height: auto;" th:text="${obj.content}"></pre></td>
+            </tr>  
+            <tr>
+                <th>Hit</th>
+                <td colspan="2" th:text="${obj.hit}">hit</th>
+            </tr>
+                
+
+            </table>
+
+            <div style="text-align: center; display: inline-block;">
+                <span>
+                    <a th:if="${prev != 0}" th:href="@{/faq/selectone.do(no=${prev},type=${param.type})}">
+                        <svg class="prevbutton" style="width:25px; margin: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                    </a>
+                </span>
+
+                <span style="margin: 100px;">
+                    <a th:href="@{/faq/selectlist.do}">
+                        <button class="btn btn-primary rounded-pill py-sm-3 px-sm-5">목록</button>
+                    </a>
+                </span>
+
+                <span>
+                    <a th:if="${next != 0}" th:href="@{/faq/selectone.do(no=${next},type=${param.type})}">
+                        <svg class="nextbutton" style="width:25px;  margin: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                    </a>
+                </span>
+            </div>
+        </tbody>
+        </CENTER>
+    </div>
+
+
+<div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+
+</body>
+</html>

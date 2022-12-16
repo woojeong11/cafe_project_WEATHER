@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 홈</title>
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    <strong>
+        <h1 class="fontmalgun" style="text-align: center;margin: 100px;">관리자 페이지입니다.</h1>
+    </strong>
+    
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+</body>
+</html>

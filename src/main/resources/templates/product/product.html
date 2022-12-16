@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>상품</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link th:href="@{/css/productfont.css}" rel="stylesheet">
+
+    <th:block th:replace="fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+<!-- header start-->
+<div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" th:src="@{/img/header/001.png}" alt="Image">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- header End -->
+ 
+<!-- 목록시작 -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3 headerfont">메뉴소개</h1>
+                    <p class="fontmalgun" style="font-size: 0.9em;">다양한 음료와 디저트가 있습니다. 실시간으로 배송해드립니다. </p>
+                </div>
+            </div>
+
+            <!-- tab -->
+            <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2 active fontmalgun" style="font-size: 0.9em;" th:href="@{/product/list.do(category='drink')}">음료</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2 active fontmalgun" style="font-size: 0.9em;" th:href="@{/product/list.do(category='dessert')}">디저트</a>
+                    </li>
+                    <li class="nav-item me-0">
+                        <a class="btn btn-outline-primary border-2 active fontmalgun" th:href="@{/product/list.do(category='goods')}">상품</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 카테고리-drink 시작-->
+        <div class="tab-content" >
+            <div th:if="${#strings.toString(param.category) == 'drink'}" class="tab-pane fade show p-0 active">
+                <div class="row g-4" >
+                    <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s" th:each="tmp, idx : ${drinklist}">
+                        <div class="product-item">
+                            <div class="position-relative bg-light overflow-hidden">
+                                <a th:href="@{/product/productone.do(no=${tmp.no})}">
+                                    <img class="img-fluid w-100" style="width: 200px; height:400px;" th:src="@{${tmp.image} }" />
+                                </a>
+                            </div>
+                            <div class="text-center p-4">
+                                <a class="d-block h5 mb-2 fontmalgun"  th:href="@{/product/productone.do(no=${tmp.no})}" th:text="${tmp.name}"></a>
+                                <span class="text-primary me-1 fontmalgun" name="p_price" th:text="|${tmp.price}원|"></span>
+                                <input type="hidden" th:value="${tmp.no}" name="drinklistno">
+                                <input type="hidden" value="1" name="quantity">
+                            </div>
+                            <div class="d-flex border-top">
+                                <small class="w-50 text-center border-end py-2">
+                                    <a class="text-body" th:href="@{/product/productone.do(no=${tmp.no})}"><i class="fa fa-eye text-primary me-2"></i>자세히보기</a>
+                                </small>
+                                <small class="w-50 text-center py-2">
+                                    <i class="fa fa-shopping-bag text-primary me-2"></i>
+                                    <input class="text-body" type="submit" value="장바구니담기" name="drinklistcart" style="background-color:transparent;  border:0px transparent solid;">
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- drink 페이지네이션 -->
+                    <div style="width: 100%; display: inline-block; text-align: center;">
+                        <th:block th:each="i : ${#numbers.sequence(1, pages)}" >
+                            <a class="a-link" th:href="@{/product/list.do(category=${param.category}, page=${i})}" th:text="${i}"></a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <!-- drink 카테고리 끝 -->
+         
+            <!-- dessert 카테고리 시작 -->
+            <div th:if="${#strings.toString(param.category) == 'dessert'}">
+                <div class="row g-4">
+                    <div class="col-xl-3 col-lg-4 col-md-6" th:each="tmp, idx : ${desertlist}">
+                        <div class="product-item">
+                            <div class="position-relative bg-light overflow-hidden">
+                                <a th:href="@{/product/productone.do(no=${tmp.no})}">
+                                    <img class="img-fluid w-100" style="width: 200px; height:350px;" th:src="@{${tmp.image} }">
+                                </a>
+                            </div>
+                            <div class="text-center p-4">
+                                <a class="d-block h5 mb-2 fontmalgun" th:href="@{/product/productone.do(no=${tmp.no})}" th:text="${tmp.name}"></a>
+                                <span class="text-primary me-1 fontmalgun" name="p_price" th:text="|${tmp.price}원|"></span>
+                                <input type="hidden" th:value="${tmp.no}" name="dessertlistno">
+                                <input type="hidden" value="1" name="quantity">
+                            </div>
+                            <div class="d-flex border-top">
+                                <small class="w-50 text-center border-end py-2">
+                                    <a class="text-body" th:href="@{/product/productone.do(no=${tmp.no})}"><i class="fa fa-eye text-primary me-2"></i>자세히보기</a>
+                                </small>
+                                <small class="w-50 text-center py-2">
+                                    <i class="fa fa-shopping-bag text-primary me-2"></i>
+                                    <input class="text-body" type="submit" value="장바구니담기" name="dessertlistcart" style="background-color:transparent;  border:0px transparent solid;">
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- dessert 페이지네이션 -->
+                    <div style="width: 100%; display: inline-block; text-align: center;">
+                        <th:block th:each="i : ${#numbers.sequence(1, pages)}" >
+                            <a class="a-link" th:href="@{/product/list.do(category=${param.category}, page=${i})}" th:text="${i}"></a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <!-- dessert 카테고리 끝 -->
+         
+            <!-- goods 카테고리 시작 -->
+            <div th:if="${#strings.toString(param.category) == 'goods'}">
+                <div class="row g-4">
+                    <div class="col-xl-3 col-lg-4 col-md-6" th:each="tmp, idx : ${goodslist}">
+                        <div class="product-item">
+                            <div class="position-relative bg-light overflow-hidden">
+                                <a th:href="@{/product/productone.do(no=${tmp.no})}">
+                                    <img class="img-fluid w-100" style="width: 200px; height:400px;" th:src="@{${tmp.image} }">
+                                </a>
+                            </div>
+                            <div class="text-center p-4">
+                                <a class="d-block h5 mb-2 fontmalgun" href="" th:text="${tmp.name}"></a>
+                                <span class="text-primary me-1 fontmalgun" name="p_price" th:text="|${tmp.price}원|"></span>
+                                <input type="hidden" th:value="${tmp.no}" name="goodslistno">
+                                <input type="hidden" value="1" name="quantity">
+                            </div>
+                            <div class="d-flex border-top">
+                                <small class="w-50 text-center border-end py-2">
+                                    <a class="text-body fontmalgun" th:href="@{/product/productone.do(no=${tmp.no})}"><i class="fa fa-eye text-primary me-2"></i>자세히보기</a>
+                                </small>
+                                <small class="w-50 text-center py-2">
+                                    <i class="fa fa-shopping-bag text-primary me-2"></i>
+                                    <input class="text-body" type="submit" value="장바구니담기" name="goodslistcart" style="background-color:transparent;  border:0px transparent solid;">
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- goods 페이지네이션 -->
+                    <div style="width: 100%; display: inline-block; text-align: center;">
+                        <th:block th:each="i : ${#numbers.sequence(1, pages)}" >
+                            <a class="a-link" th:href="@{/product/list.do(category=${param.category}, page=${i})}" th:text="${i}"></a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <!-- goods 카테고리 끝 -->
+        </div>
+    </div>
+</div>
+<!-- 목록 끝-->
+        
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+    <script>
+
+        /*<![CDATA[*/
+        var pages = '[[${pages}]]';
+        console.log(pages);
+        /*]]>*/
+
+        var drinkcartbtns   = document.getElementsByName('drinklistcart');
+        var drinknos        = document.getElementsByName('drinklistno');
+        var dessertcartbtns = document.getElementsByName('dessertlistcart');
+        var dessertnos      = document.getElementsByName('dessertlistno');
+        var goodscartbtns   = document.getElementsByName('goodslistcart');
+        var goodsnos        = document.getElementsByName('goodslistno');
+
+        for(let i=0; i<drinkcartbtns.length; i++){
+            drinkcartbtns[i].addEventListener('click', function(){
+                var url     = `[[@{/rest/recommend/insert.json}]]`;
+                var body    = {
+                    productno : drinknos[i].value
+                };
+                
+                axios.post(url, body).then(function(response){
+                    console.log(response);
+                    if(response.data.status == 200){
+                        alert('성공적으로 카트에 담겼습니다.');
+    
+                        const url1 = `[[@{/rest/cart/count.json}]]`;
+    
+                        axios.get(url1).then(function(response){
+                            console.log(response);
+                            document.getElementById('cartcount').innerText = response.data;
+                            document.getElementById('cartcount1').innerText = response.data;
+                        });
+                    }
+                });
+            });
+        }
+
+        for(let i=0; i<dessertcartbtns.length; i++){
+            dessertcartbtns[i].addEventListener('click', function(){
+                var url     = `[[@{/rest/recommend/insert.json}]]`;
+                var body    = {
+                    productno : dessertnos[i].value
+                };
+                
+                axios.post(url, body).then(function(response){
+                    console.log(response);
+                    if(response.data.status == 200){
+                        alert('성공적으로 카트에 담겼습니다.');
+    
+                        const url1 = `[[@{/rest/cart/count.json}]]`;
+    
+                        axios.get(url1).then(function(response){
+                            console.log(response);
+                            document.getElementById('cartcount').innerText = response.data;
+                            document.getElementById('cartcount1').innerText = response.data;
+                        });
+                    }
+                });
+            });
+        }
+        
+        for(let i=0; i<goodscartbtns.length; i++){
+            goodscartbtns[i].addEventListener('click', function(){
+                var url     = `[[@{/rest/recommend/insert.json}]]`;
+                var body    = {
+                    productno : goodsnos[i].value
+                };
+                
+                axios.post(url, body).then(function(response){
+                    console.log(response);
+                    if(response.data.status == 200){
+                        alert('성공적으로 카트에 담겼습니다.');
+    
+                        const url1 = `[[@{/rest/cart/count.json}]]`;
+    
+                        axios.get(url1).then(function(response){
+                            console.log(response);
+                            document.getElementById('cartcount').innerText = response.data;
+                            document.getElementById('cartcount1').innerText = response.data;
+                        });
+                    }
+                });
+            });
+        }
+
+        // 가격 콤마찍기
+        var price = document.getElementsByName("p_price");
+        // console.log(price);
+        var pprice = document.getElementsByClassName("text-primary me-1");
+        for(i=0; i<price.length; i++){
+            price2 = price[i].innerHTML.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+            // console.log(price2);
+            pprice[i].innerHTML=price2
+        }
+    </script>
+</body>
+
+</html>

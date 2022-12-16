@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>회원가입</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+
+    <!-- Page Header Start -->
+    <!-- <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <h1 class="display-3 mb-3 animated slideInDown"></h1>  
+        </div>
+    </div> -->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-6 border" style="margin-top: 100px;">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3">회원가입</h1>
+            </div>
+            <div class="row g-5 justify-content-center">
+                
+                <div class="col-lg-7 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                    <p class="mb-4" style="text-align: center;">필수 입력 정보</a></p>
+                    <form th:action="@{/member/join.do}" method="post" id="joinform" />
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="userid" id="userid" />
+                                    <label for="userid">Enter USERID</label>
+                                    <div class="valid-feedback">
+                                    </div>
+                                    <div class="invalid-feedback" id="useridinvalid">
+                                        영어, 숫자를 사용해 5~12자 이하로 작성해 주세요.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" name="userpw" id="userpw" />
+                                    <label for="userpw">Enter USER PASSWORD</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback" id="userpwinvalid">
+                                        5~20자리 이내로 영문,숫자,특수문자 중 2가지 이상을 혼합하여 입력해주세요.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="userpw2" >
+                                    <label for="userpw2">Enter CONFIRM PASSWORD</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        비밀번호가 일치하지 않습니다.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="name" id="name" />
+                                    <label for="name">Enter Your Name</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback" id="usernameinvalid">
+                                        이름을 입력해 주세요.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="nickname" id="nickname" />
+                                    <label for="nickname">Enter Your NickName</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback" id="usernicknameinvalid">
+                                        닉네임을 3~8자로 입력해 주세요.(단, 특수문자는 제외)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="phone" id="phone" />
+                                    <label for="phone">Enter Your Phone-Number</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        연락처를 입력해주세요.(ex. 01011112222)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="email" id="email" />
+                                    <label for="email">Enter Your Email</label>
+                                    <div class="valid-feedback" >
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        이메일 양식에 맞게 입력해 주세요.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="btn btn-primary rounded-pill py-3 px-5" type="submit" value="회원가입" />
+                            </div>
+                            <div class="col-md-6" style="vertical-align: middle; margin-top: 35px;" >
+                                <div style="margin-right: 0px; text-align: right;">
+                                    <label style="vertical-align: middle; margin-right: 0px;">고객님의 선택정보를 입력하시겠습니까?</label>
+                                    <input type="checkbox" id="chk" style=" vertical-align: middle; margin-right: 0px;"  />    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="joinModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                  <!-- 선택입력 정보 Form -->
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">선택 입력 정보</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="age">Enter Your age</label>
+                                        <input type="number" name="age" class="form-control" id="age" />
+                                    </div>
+                                    <div class="mb-3" style="margin-top: 50px;">
+                                        <label>Choose Your Gender</label>
+                                        <div style="width: 100%; margin-top: 10px;">
+                                            <div class="form-check" style="width: 50%; float: left; text-align: center;">
+                                                <input type="radio" name="gender" id="flexRadioDefault1" th:value="M" />
+                                                <label >
+                                                  남자
+                                                </label>
+                                            </div>
+                                            <div class="form-check" style="width: 50%; float: right; text-align: center;">
+                                                <input type="radio" name="gender" id="flexRadioDefault2" th:value="F" />
+                                                <label >
+                                                    여자
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer pt-4">                  
+                                    <button class="btn btn-primary rounded-pill py-3 px-5" data-bs-dismiss="modal">입력완료</button>
+                                  </div> 
+                              </div>
+                            </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+    <script>
+		$('#chk').click(function(e){
+			e.preventDefault();
+			$('#joinModal').modal("show");
+		});
+	</script>
+
+    <script>
+        //userid의 유효성 여부(첫번째)를 저장할 변수를 만들고 초기값 false 부여
+        let isuseridValid=false;
+
+        //userid의 최종 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let isuseridValidlast=false;
+
+        //userpw의 유효성여부를 저장할 변수
+        let isuserpwValid=false;
+
+        //userpw2의 유효성여부를 저장할 변수
+        let isuserpw2Valid=false;
+
+        //이름의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let isnameValid=false;
+
+        //닉네임의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let isNicknameValid=false;
+
+        //연락처의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let isphoneValid=false;
+
+        // 이메일의 유효성 여부를 저장할 변수
+        let isemailValid=false;
+
+        // id 가 userid 인 input 요소에 input 이벤트가 일어났을때 실행할 함수 등록 
+        document.querySelector("#userid").addEventListener("input", function(){
+           
+            let useridtext = document.getElementById('userid');
+            console.log(useridtext.value);
+            console.log(typeof(useridtext.value));
+            // 유효성검사 자격 미달시 나오는 멘트의 div 
+            const userinvalid = document.getElementById('useridinvalid');
+            //console.log(userinvalid.textContent);
+
+            //1. 입력한 value 값을 읽어온다.
+           let inputuserid=this.value;
+
+           // 유효성 검사를 위한 정규식
+           const regex = /^[|a-z|A-Z|0-9|]+$/;
+           
+           console.log(inputuserid.length);
+           //2. 1차 유효성(5글자이상 10글자 이하 영어와 숫자만)을 검증한다.
+           isuseridValid = inputuserid.length >= 5 && inputuserid.length <= 10 && regex.test(inputuserid);
+           
+           const url = `[[@{/api/member/idcheck.json?userid=}]]` + useridtext.value;
+           
+           //3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+           axios.get(url).then(function(response){
+                console.log(response);
+                if(response.data.status == 200 && isuseridValid){
+                    document.querySelector("#userid").classList.remove("is-invalid");
+                    document.querySelector("#userid").classList.add("is-valid");   
+                    isuseridValidlast = true;   
+                }
+                else if( isuseridValid && response.data.status == 0 ){
+                    document.querySelector("#userid").classList.remove("is-valid");
+                    document.querySelector("#userid").classList.add("is-invalid");
+                    userinvalid.textContent = "중복된 아이디입니다.";
+                    isuseridValidlast = false;
+                }
+                else if( !isuseridValid && response.data.status == 200 ){
+                    document.querySelector("#userid").classList.remove("is-valid");
+                    document.querySelector("#userid").classList.add("is-invalid");
+                    userinvalid.textContent = "영어, 숫자를 사용해 5~12자 이하로 작성해 주세요.";
+                    isuseridValidlast = false;
+                }
+                else if( !isuseridValid && response.data.status == 0){
+                    document.querySelector("#userid").classList.remove("is-valid");
+                    document.querySelector("#userid").classList.add("is-invalid");
+                    userinvalid.textContent = "영어, 숫자를 사용해 5~12자 이하로 작성해 주세요.";
+                    isuseridValidlast = false;
+                }
+            });
+        });
+
+        // 비밀번호 입력칸 유효성 검사
+        document.querySelector("#userpw").addEventListener('input', function(){
+            
+             // 1. 입력한 value의 값을 불러온다.
+            let inputuserpw = this.value;
+             
+             // isuserpwValid
+             // 변수 값들
+             var num = inputuserpw.search(/[0-9]/g);
+             var eng = inputuserpw.search(/[a-z]/ig);
+             var spe = inputuserpw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+             
+             console.log(inputuserpw.search(/\s/));
+             // 유효성검사 자격 미달시 나오는 멘트의 div 
+             const userinvalid = document.getElementById('userpwinvalid');
+             
+             // 2. 유효성 검사 기준
+             // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가 
+             if(inputuserpw.length < 5 || inputuserpw.length > 20 || (num < 0 && eng < 0) || (eng < 0 && spe < 0) || (spe < 0 && num < 0)){
+                 this.classList.remove("is-valid");
+                 this.classList.add("is-invalid");
+                 userinvalid.textContent = "5~20자리 이내로 영문,숫자,특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
+                 isuserpwValid=false;              
+             }
+             else if(inputuserpw.search(/\s/) != -1){
+                 this.classList.remove("is-valid");
+                 this.classList.add("is-invalid");
+                 userinvalid.textContent = "비밀번호는 공백 없이 입력해주세요.";
+                 isuserpwValid=false;
+             }
+             else {
+                 this.classList.remove("is-invalid");
+                 this.classList.add("is-valid");
+                 isuserpwValid=true;
+             }
+             
+
+        });
+            
+
+        // 비밀번호 확인칸 유효성 검사
+        document.querySelector("#userpw2").addEventListener('input', function(){
+            
+            // userpw 폼의 값을 불러옴
+            let inputuserpw  = document.getElementById("userpw").value;
+
+            // 1. 입력한 value의 값을 불러온다.
+            let inputuserpw2 = this.value;
+
+            // 2. 유효성 검사 기준
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if( inputuserpw == inputuserpw2 ){
+                isuserpw2Valid = true;
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+            else{
+                isuserpw2Valid = false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+            }
+        });
+
+
+        // 이름 유효성 검사
+        document.querySelector("#name").addEventListener('input', function(){
+            
+            // 1. 입력한 value의 값을 불러온다.
+            let inputname = this.value;
+
+            const userinvalid = document.getElementById('usernameinvalid');
+
+            // 2. 유효성 검사 기준
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(inputname.search(/\s/) != -1){
+                isnameValid=false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "공백 없이 입력해주세요.";
+            }
+            else if( inputname.length <= 0 ){
+                isnameValid = false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "이름을 입력해 주세요.";
+            }
+            else{
+                isnameValid = true;
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+        
+        // 닉네임 유효성 검사
+        document.querySelector("#nickname").addEventListener('input', function(){
+
+            const userinvalid = document.getElementById('usernicknameinvalid');
+
+            // 1. 입력한 value의 값을 불러온다.
+            let inputnickname = this.value;
+
+            // 특수문자 정규식
+            const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+
+            // 2. 유효성 검사 기준 ( 3~8자 , 특수문자 제외)
+            // isNicknameValid = inputnickname.length >= 3 && inputnickname.length <= 8 && !regExp.test(inputnickname); 
+            console.log(regExp.test(inputnickname));
+
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가 
+            if(inputnickname.search(/\s/) != -1){
+                isNicknameValid=false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "공백 없이 입력해주세요.";
+            }
+            else if( inputnickname.length < 3 || inputnickname.length > 8 || regExp.test(inputnickname) == true ){
+                isNicknameValid = false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "닉네임을 3~8자로 입력해 주세요.(단, 특수문자는 제외)";
+            }
+            else{
+                isNicknameValid = true;
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+        
+        // 연락처 유효성 검사
+        document.querySelector("#phone").addEventListener('input', function(){
+
+            let regExp = /^(010)-?[0-9]{4}-?[0-9]{4}$/;
+            
+            // 1. 입력한 value의 값을 불러온다.
+            // 하이픈 자동입력
+            inputphone = this.value
+                            .replace(/[^0-9]/g, '')
+                            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+            
+            this.value = inputphone;
+            // 2. 유효성 검사 기준
+            isphoneValid = regExp.test(inputphone) == true;
+            console.log(inputphone);
+            console.log(isphoneValid);
+            
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(!isphoneValid){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+            }
+            else{
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+
+        // 이메일 유효성 검사
+        document.querySelector("#email").addEventListener('input', function(){
+
+            let regExp = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+
+            // 1. 입력한 value의 값을 불러온다.
+            inputemail = this.value;
+
+            // 2. 유효성 검사 기준
+            isemailValid = regExp.test(inputemail) == true;
+
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(!isemailValid){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+            }
+            else{
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+
+        
+        // 폼에 submit 이벤트가 일어 났을때 실행할 함수 등록
+        document.querySelector("#joinform").addEventListener("submit", function(e){
+            //만일 폼이 유효하지 않는다면 전송을 막아주기
+            if(!isuseridValidlast || !isuserpwValid || !isuserpw2Valid || !isnameValid || !isNicknameValid || !isphoneValid || !isemailValid ){
+                //이벤트 객체의 함수를 이용해서 폼 전송 막아주기 
+                e.preventDefault();
+                alert('양식에 맞게 입력해 주세요!');
+            }
+        });
+    </script>
+</body>
+
+</html>

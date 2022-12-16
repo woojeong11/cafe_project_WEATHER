@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-문의상세</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+    <style>
+        .cococo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        }
+        .coco {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    
+    <!-- Contact Start -->
+
+    <!-- <p th:if="${session.LOGIN!=null}" th:text="${session.LOGIN}"></p> -->
+    <!-- <p th:text="${userid}"></p> -->
+    <!-- <p th:text="${session.TOKEN}"></p> -->
+
+    <div class="container-xxl py-6">
+        <div class="container">
+            <div class="row g-0 gx-5 align-items-end">
+                <div class="col-lg-6"></div>
+            </div>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active" style="border-radius: 30px; border: 1px solid rgb(231, 227, 227); padding: 100px;" >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; ">
+                        <h1 class="display-5 mb-3 headerfont">문의게시판 관리</h1>
+                        <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                    </div>
+                    <div class="row g-5 justify-content-center">
+                        <div class="col-lg-9 col-md-12 wow fadeInUp" >
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">제목</span>
+                                <input type="text" class="form-control" th:value="${board.title}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;" /> 
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">작성자</span>
+                                <input type="text" class="form-control" th:value="${board.userid}"  aria-label="Username" aria-describedby="basic-addon1" disabled style="background-color: white;"/> 
+                            </div>
+                            <span>
+                                <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">작성일</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.regdate1}"></p> 
+                                <p style="display: inline-block; font-size:12pt; font-family:맑은 고딕;">조회수</p><p style="display: inline-block; font-size:10pt; font-family:맑은 고딕;" th:text="${board.hit}"></p>
+                            </span>                          
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label"></label>
+                                <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" th:text="${board.content}" readonly/></textarea> -->
+                                <span class="form-control" id="exampleFormControlTextarea1" th:utext="${board.content}" disabled style="overflow-y:scroll; background-color: white; height: 300px;"/></span>
+                            </div>
+                            <p><i class="bi bi-chat-square-quote"></i> 첨부된 이미지</p>
+                            <div th:each="obj, idx : ${image}" style="display: inline-block ;">
+                                <a th:href="@{/qboardimage/image(no=${obj.no})}" onClick="window.open(this.href, '', 'width=700, height=500');return false;">
+                                    <img th:src="@{/qboardimage/image(no=${obj.no})}" style=" width:200px; height:200px;">
+                                </a>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div style="text-align: center;">
+                                <!-- <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">문의등록하기</button> -->
+                                <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/admin/qboard/home.do}">메인으로 돌아가기</a>
+                                <!-- <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/update.do(no=${board.no})}">수정하기</a> -->
+                                <form th:action="@{/admin/qboard/delete.do}" method="post" enctype="multipart/form-data" style="display:inline;">
+                                    <input type="hidden" class="form-control" id="exampleFormControlInput1" th:value="${board.no}" name="no" grreadonly/>
+                                    <input type="submit" class="btn btn-primary rounded-pill py-3 px-5" value="삭제"/>
+                                </form>
+                                <!-- <div th:if="${board.userid == userid}">
+                                </div> -->
+                                <!-- <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/qboard/delete.do(no=${board.grp})}">삭제하기</a> -->
+                                <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/admin/qboard/repwrite.do(no=${board.no})}">답글작성</a>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact End -->
+   
+    
+  
+
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+    
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>주소</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link th:href="@{/css/order1.css}" rel="stylesheet">
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+
+</head>
+
+<body>
+
+    <!-- <div th:each="tmp, idx :${list}">
+        <p th:text="${tmp.address}"></p>
+        <p th:text="${tmp.address2}"></p>
+        <p th:text="${tmp.address3}"></p>
+    </div> -->
+
+    <button id="show1">팝업열기</button>
+
+    <div class="background1">
+        <div class="window1">
+            <div class="popup1" style="padding: 15px;">
+                <!-- <hr/> -->
+            <div th:each="tmp, idx :${list}">
+                <div class="mb-3 row">
+                    <label style="width: 150px;">우편번호</label>
+                    <div class="col-sm-10">
+                        <input type="text" th:value="${tmp.post}" class="form-control" id="sample6_postcode" name="post" placeholder="우편번호" style="width: 150px; display:inline;">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label style="width: 150px;">주소</label>
+                    <div class="col-sm-10">
+                        <input type="text" th:value="${tmp.address}" class="form-control" name="address" id="sample6_address" placeholder="주소" style="width: 400px;">
+                    </div>
+                </div>
+                
+                <div class="mb-3 row">
+                    <label style="width: 150px;">상세주소</label>
+                    <div class="col-sm-10">
+                        <input type="text" th:value="${tmp.address2}" class="form-control" name="address2" id="sample6_detailAddress" placeholder="상세주소" style="width: 400px; display:inline;">
+                        <input type="text" th:value="${tmp.address3}" class="form-control" name="address3" id="sample6_extraAddress" placeholder="참고항목" style="width: 150px;">
+                    </div>
+                </div>
+
+                <hr/>
+                    <!-- <p th:text="${tmp.address}"></p>
+                    <p th:text="${tmp.address2}"></p>
+                    <p th:text="${tmp.address3}"></p> -->
+                </div>
+                <button id="close1">팝업닫기</button>
+            </div>
+        <div>
+    <div>
+
+    <script>
+                //=================================================소윤
+    function show1 () {
+    document.querySelector(".background1").className = "background1 show1";
+    }
+
+    function close1 () { 
+    document.querySelector(".background1").className = "background1";
+    }
+
+    document.querySelector("#show1").addEventListener('click', show1);
+    document.querySelector("#close1").addEventListener('click', close1);
+    </script>
+</body>
+
+</html>

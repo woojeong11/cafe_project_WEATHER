@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>마이페이지</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    
+<!-- 
+    <header class="py-5 bg-image-full" style="background: url(../img/admin.jpg) ; background-size: cover; width: 100%; height: 400px;">
+        
+    </header> -->
+
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-6">
+        <div class="container" style="text-align: center; background: -webkit-linear-gradient(left,  #ffffff); height: 900px;" >
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3">My Member's Status</h1>
+                <p>고객님의 weather cafe 서비스 이용현황 입니다.</p>
+            </div>
+            
+            <div class="container emp-profile border">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="profile-img">
+                                <img class="img-fluid rounded-circle mb-4"  src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" style="width: 150px; height: 150px;" alt="..." th:if="${session.url == null} and ${userinfo.type == 0}">
+                                <img class="img-fluid rounded-circle mb-4"  th:src="${session.url}" style="width: 150px; height: 150px;" alt="..." th:if="${session.url != null} and ${userinfo.type == 0}">
+                                <img class="img-fluid rounded-circle mb-4" th:src="${session.url}" style="width: 150px; height: 150px; cursor: pointer;" alt="..." id="img_section" th:if="${session.url != null} and ${userinfo.type == 1}">
+                                <form th:action="@{/member/profileimageinsert.do}" method="post" enctype="multipart/form-data" >
+                                    <input type="file" style="display: none;" accept="image/*" name="file" id="upload_file" />
+                                    <input type="submit" class="file btn btn-lg btn-primary" value="photo 수정하기" th:if="${userinfo.type == 1}" />
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="profile-head">
+                                        <h5 th:text="${userinfo.name}" ></h5>
+                                        <h6 th:text="${session.LOGIN}" ></h6>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home" data-bs-toggle="tab" href="#home" role="tab" aria-controls="tap_home" aria-selected="true" data-bs-target="#tap_home">About</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="edit" data-bs-toggle="tab" href="#edit" role="tab" aria-controls="tap_edit" aria-selected="false" data-bs-target="#tap_edit">Edit Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pwedit" data-bs-toggle="tab" href="#pwedit" role="tab" aria-controls="tap_pwedit" aria-selected="false" data-bs-target="#tap_pwedit">Edit Password</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" class="profile-edit-btn" name="btnAddMore" data-bs-toggle="modal" data-bs-target="#deleteModalForm" value="Delete Account"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="profile-work">
+                                <p>my menu</p>
+                                <a href="">내정보보기</a><br/>
+                                <a th:href="@{/member/orderinfo/ing.do}">진행주문목록</a><br/>
+                                <a th:href="@{/member/orderinfo/complete.do}">완료주문목록 </a><br />
+                                <a th:href="@{/member/orderinfo/myreview.do}">리뷰목록 </a><br />
+                                <a th:href="@{/member/orderinfo/myaddress.do}">배송지목록 </a><br />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tap_home" role="tabpanel" aria-labelledby="home">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>NickName</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p th:text="${userinfo.nickname}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Age</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p th:text="${minfo.age}" th:if="${minfo.age != 'null' and minfo.age != null}"></p>
+                                                    <p th:if="${minfo.age == 'null' or minfo.age == null}">동의하지 않으신 정보입니다.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Email</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p th:text="${userinfo.email}" th:if="${userinfo.email != 'null'}"></p>
+                                                    <p th:if="${userinfo.email == 'null'}">동의하지 않으신 정보입니다.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Phone</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p th:text="${userinfo.phone}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Gender</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p th:text="${minfo.gender}" th:if="${minfo.gender != 'null' and minfo.gender != null}"></p>
+                                                    <p th:if="${minfo.gender == 'null' or minfo.gender == null }">동의하지 않으신 정보입니다.</p>
+                                                </div>
+                                            </div>
+                                </div>
+                                <div class="tab-pane fade" id="tap_edit" role="tabpanel" aria-labelledby="edit">
+                                <form th:action="@{/member/updateuserinfo.do}" id="updatemember" method="post">
+                                    <div th:if="${session.LOGIN == '일반회원'}">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>User Info</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control is-valid" th:value=${userinfo.name} style="text-align: center;" name="name" id="updatename" />
+                                                <div class="valid-feedback" >
+                                                </div>
+                                                <div class="invalid-feedback" id="updatenameinvalid">
+                                                    이름을 입력해 주세요.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>NickName</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control is-valid" th:value=${userinfo.nickname} style="text-align: center;" name="nickname" id="updatenickname" />
+                                                <div class="valid-feedback" >
+                                                </div>
+                                                <div class="invalid-feedback" id="updatenicknameinvalid">
+                                                    닉네임을 3~8자로 입력해 주세요.(단, 특수문자는 제외)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>Phone</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control is-valid" th:value=${userinfo.phone} style="text-align: center;" name="phone" id="updatephone" />
+                                                <div class="valid-feedback" >
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    연락처를 입력해주세요.(ex. 01011112222)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control is-valid" th:value=${userinfo.email} style="text-align: center;" name="email" id="updateemail" />
+                                                <div class="valid-feedback" >
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    이메일 양식에 맞게 입력해 주세요.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-12">
+                                                <h4>User Select Info</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>AGE</label>
+                                            </div>
+                                            <div class="col-md-6" th:if="${minfo.age != 'null' and minfo.age != null }" >
+                                                <input type="number" class="form-control" th:value=${minfo.age} style="text-align: center;" name="age" id="age" />
+                                            </div>
+                                            <div class="col-md-6" th:if="${minfo.age == 'null' or minfo.age == null }" >
+                                                <input type="number" class="form-control" placeholder="입력된 정보가 없습니다." style="text-align: center;" name="age" id="age" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                            <div class="col-md-6">
+                                                <label>Gender</label>
+                                            </div>
+                                            <div class="col-md-6" th:if="${minfo.gender == 'null' or minfo.gender == null}" >
+                                                <div class="form-check" style="width: 50%; float: left; text-align: center;">
+                                                    <input type="radio" name="gender" id="flexRadioDefault1" th:value="M" />
+                                                    <label >
+                                                      남자
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" style="width: 50%; float: right; text-align: center;">
+                                                    <input type="radio" name="gender" id="flexRadioDefault2" th:value="F"  />
+                                                    <label style="margin-right: 40px;" >
+                                                        여자
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" th:if="${minfo.gender != 'null' and minfo.gender != null }">
+                                                <input type="hidden" name="gender" th:value=${minfo.gender}  />
+                                                <p th:text="${minfo.gender}"></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 10px;" type="submit" value="수정하기">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                    <div th:if="${session.LOGIN == '카카오회원'}">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img src="https://i.pinimg.com/236x/38/05/6c/38056cf98d9900b035b10446e82dd15c.jpg" style="height: 300px;" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p>아래 링크의 kakao 프로필에서 변경해 주십시오.</p>
+                                                <a href="https://accounts.kakao.com/weblogin/account/partner" style="color: #ff0000;">kakao 선택 제공 정보 재설정하기</a>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div th:if="${session.LOGIN == '네이버회원'}">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img src="https://cdn.gokorea.kr/news/photo/202209/731062_44339_282.jpg" style="height: 300px;" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p>아래 링크의 Naver 프로필에서 변경해 주십시오.</p>
+                                                <a href="https://nid.naver.com/internalToken/view/tokenList/pc/ko" style="color: #ff0000;">Naver 선택 제공 정보 재설정하기</a>
+                                            </div>
+                                        </div>                                        
+                                    </div>                                    
+                                </div>
+                                <div class="tab-pane fade" id="tap_pwedit" role="tabpanel" aria-labelledby="pwedit">
+                                    <div th:if="${session.LOGIN == '카카오회원'}">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img src="https://i.pinimg.com/236x/38/05/6c/38056cf98d9900b035b10446e82dd15c.jpg" style="height: 300px;" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p>kakao회원님은 비밀번호 변경이 불가능 합니다.</p>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div th:if="${session.LOGIN == '네이버회원'}">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img src="https://cdn.gokorea.kr/news/photo/202209/731062_44339_282.jpg" style="height: 300px;" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p>Naver회원님은 비밀번호 변경이 불가능 합니다.</p>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div th:if="${session.LOGIN == '일반회원'}">
+                                        <form th:action="@{/member/passwordupdate.do}" method="post">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h4>Password Edit</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                                <div class="col-md-6">
+                                                    <label>현재 비밀번호</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="password" class="form-control" style="text-align: center;" name="password" />
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                                <div class="col-md-6">
+                                                    <label>변경할 비밀번호</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="password" class="form-control" style="text-align: center;" name="password1" />
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 10px; vertical-align: middle;">
+                                                <div class="col-md-6">
+                                                    <label>변경할 비밀번호 확인</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="password" class="form-control" style="text-align: center;" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 10px;" type="submit" value="수정하기">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>     
+            </div>
+            <!-- 회원탈퇴 Modal Start -->
+            <form th:action="@{/member/delete.do}" method="post">
+                <div class="modal fade" id="deleteModalForm" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #000099;">
+                                <h5 class="modal-title" style="color: #ffffff; font-family: '맑은 고딕'">회원탈퇴</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                              <div class="modal-body">
+                    
+                                <div class="mb-3">
+                                    <h4 style="text-align: left; font-family: '맑은 고딕'" >정말로 탈퇴하시겠습니까?</h4>
+                                    <p style="text-align:left;">
+                                        탈퇴를 하시면, 회원님의 스탬프 및 쿠폰사용이 불가하며,
+                                        이미 결제하신 건에대한 결제취소 및 결제수단 변경이 불가합니다.
+                                    </p>
+                                </div>
+    
+                                <div class="mb-3">
+                                    <input type="password" name="userpw" class="form-control" id="nowPassword" placeholder="현재 비밀번호를 입력해 주세요.">
+                                </div>
+    
+                              </div>
+                              <div class="modal-footer pt-4">
+                                <input type="button" class="btn btn-success mx-auto" style="background-color: #cccccc; width: 40%;" data-bs-dismiss="modal" aria-label="Close" value="취소" />
+                                <input type="submit" class="btn btn-light mx-auto" style="background-color: #000099; color: #ffffff; width: 40%;" value="탈퇴하기" />
+                              </div>                          
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- 회원탈퇴 Modal End -->
+        </div>
+                
+        </div>
+    <!-- Contact End -->
+
+
+    <!-- Google Map Start -->
+    <!-- <div class="container-xxl px-0 wow fadeIn" data-wow-delay="0.1s" style="margin-bottom: -6px;">
+        <iframe class="w-100" style="height: 450px;"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
+            frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div> -->
+    <!-- Google Map End -->
+
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        const file  = document.getElementById('upload_file');
+        const image = document.getElementById('img_section');
+
+        image.addEventListener('click', function(){
+            file.click();
+        });
+
+        file.addEventListener('change', function(e){
+            if(e.target.files[0]){//첨부함
+                console.log('T');
+                image.src=URL.createObjectURL(e.target.files[0]);
+            }
+            else{//첨부안함
+                console.log('F');
+                image.src="[[@{/img/image.png}]]";
+            }
+        })
+    </script>
+
+    <!--수정 유효성 검사-->
+    <script>
+        //이름의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let updatenameValid=true;
+
+        //닉네임의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let updateNicknameValid=true;
+
+        //연락처의 유효성 여부를 저장할 변수를 만들고 초기값 false 부여
+        let updatephoneValid=true;
+
+        // 이메일의 유효성 여부를 저장할 변수
+        let updateemailValid=true;
+
+        // 이름 유효성 검사
+        document.querySelector("#updatename").addEventListener('input', function(){
+            
+            // 1. 입력한 value의 값을 불러온다.
+            let inputname = this.value;
+
+            const userinvalid = document.getElementById('updatenameinvalid');
+
+            // 2. 유효성 검사 기준
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(inputname.search(/\s/) != -1){
+                updatenameValid=false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "공백 없이 입력해주세요.";
+            }
+            else if( inputname.length <= 0 ){
+                updatenameValid = false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "이름을 입력해 주세요.";
+            }
+            else{
+                updatenameValid = true;
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+        
+        // 닉네임 유효성 검사
+        document.querySelector("#updatenickname").addEventListener('input', function(){
+
+            const userinvalid = document.getElementById('updatenicknameinvalid');
+
+            // 1. 입력한 value의 값을 불러온다.
+            let inputnickname = this.value;
+
+            // 특수문자 정규식
+            const regExp = /[~!@#$%^&*()_+|<>?:{}]/;
+
+            // 2. 유효성 검사 기준 ( 3~8자 , 특수문자 제외)
+            // isNicknameValid = inputnickname.length >= 3 && inputnickname.length <= 8 && !regExp.test(inputnickname); 
+            console.log(regExp.test(inputnickname));
+
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가 
+            if(inputnickname.search(/\s/) != -1){
+                updateNicknameValid=false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "공백 없이 입력해주세요.";
+            }
+            else if( inputnickname.length < 3 || inputnickname.length > 8 || regExp.test(inputnickname) == true ){
+                updateNicknameValid = false;
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "닉네임을 3~8자로 입력해 주세요.(단, 특수문자는 제외)";
+            }
+            else{
+                updateNicknameValid = true;
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+        
+        // 연락처 유효성 검사
+        document.querySelector("#updatephone").addEventListener('input', function(){
+
+            let regExp = /^(010)-?[0-9]{4}-?[0-9]{4}$/;
+            
+            // 1. 입력한 value의 값을 불러온다.
+            // 하이픈 자동입력
+            inputphone = this.value
+                            .replace(/[^0-9]/g, '')
+                            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+            
+            this.value = inputphone;
+            // 2. 유효성 검사 기준
+            updatephoneValid = regExp.test(inputphone) == true;
+            console.log(inputphone);
+            
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(!updatephoneValid){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+            }
+            else{
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+
+        // 이메일 유효성 검사
+        document.querySelector("#updateemail").addEventListener('input', function(){
+
+            let regExp = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+
+            // 1. 입력한 value의 값을 불러온다.
+            inputemail = this.value;
+
+            // 2. 유효성 검사 기준
+            updateemailValid = regExp.test(inputemail) == true;
+            console.log(updateemailValid);
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+            if(!updateemailValid){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+            }
+            else{
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+
+        
+        // 폼에 submit 이벤트가 일어 났을때 실행할 함수 등록
+        document.querySelector("#updatemember").addEventListener("submit", function(e){
+            //만일 폼이 유효하지 않는다면 전송을 막아주기
+            console.log(updatenameValid);
+            console.log(updateNicknameValid);
+            console.log(updatephoneValid);
+            console.log(updateemailValid);
+            if( !updatenameValid || !updateNicknameValid || !updatephoneValid || !updateemailValid ){
+                //이벤트 객체의 함수를 이용해서 폼 전송 막아주기 
+                e.preventDefault();
+                alert('양식에 맞게 입력해 주세요!');
+            }
+        });
+    </script>
+</body>
+
+</html>

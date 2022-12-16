@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AddressMapper">
+    <!-- 시퀀스 꺼내기 -->
+    <select id="addressSeq" resultType="long">
+            SELECT SEQ_ADDRESS_NO.NEXTVAL FROM DUAL
+    </select>
+    <!-- 시퀀스꺼내기 사용해서 인서트 -->
+    <insert id="insertAddress" parameterType="com.example.dto.AddressDTO">
+        INSERT INTO ADDRESSTBL(NO ,ADDRESS ,POST ,USERID,ADDRESS2,ADDRESS3,REP)
+        VALUES(#{no},#{address},#{post},#{userid},#{address2},#{address3},#{rep})
+    </insert>
+    <!-- 시퀀스안꺼내고 바로 주소인서트 -->
+    <insert id="insertAddress2" parameterType="com.example.dto.AddressDTO">
+        INSERT INTO ADDRESSTBL(NO ,ADDRESS ,POST ,USERID,ADDRESS2,ADDRESS3, REP )
+        VALUES(SEQ_ADDRESS_NO.NEXTVAL,#{address},#{post},#{userid},#{address2},#{address3},#{rep})
+    </insert>
+
+    <select id="selectList" parameterType="String" resultType="com.example.dto.AddressDTO">
+        SELECT * FROM ADDRESSTBL WHERE USERID=#{userid}
+    </select>
+
+    <!--대표 배송지 설정-->
+    <update id="updaterep" parameterType="map"> 
+        UPDATE ADDRESSTBL SET
+        REP = (CASE
+            WHEN NO = #{no} THEN 1
+            ELSE 0
+            END)
+        WHERE USERID = #{userid}
+    </update>
+
+    <!--대표 배송지 불러오기-->
+    <select id="selectRownum" parameterType="String" resultType="com.example.dto.AddressDTO">
+        SELECT A.* FROM ADDRESSTBL A
+        WHERE REP = 1 AND USERID=#{userid}
+    </select>
+
+    <!--주소1개불러오기(addressno 기준)-->
+    <select id="selectaddressByno" parameterType="Long" resultType="com.example.dto.AddressDTO">
+        SELECT * FROM ADDRESSTBL WHERE NO=#{addressno} 
+    </select>
+
+    <!--주소1개불러오기(map 기준)-->
+    <select id="selectaddressBymap" parameterType="map" resultType="com.example.dto.AddressDTO">
+        SELECT * FROM ADDRESSTBL WHERE USERID=#{userid} AND POST = #{post} AND ADDRESS = #{address} AND ADDRESS2 = #{address2} AND ADDRESS3 = #{address3}
+    </select>
+
+    <select id="selectListpage" parameterType="map" resultType="com.example.dto.AddressDTO">
+        SELECT C.* FROM 
+                (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.NO DESC) ROWN FROM ADDRESSTBL P WHERE P.USERID = #{userid}) C
+                WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC
+    </select>
+
+    <select id="countaddresstbl" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) CNT FROM ADDRESSTBL WHERE USERID = #{userid} 
+    </select>
+
+    <delete id="deleteaddress" parameterType="Long">
+        DELETE FROM ADDRESSTBL WHERE NO = #{no} 
+    </delete>
+</mapper>

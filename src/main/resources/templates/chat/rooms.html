@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/FAQselectlist.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <title>1:1문의 방목록</title>
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+</head>
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+      <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+              <div class="carousel-item active">
+                  <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- header End -->
+
+
+
+    <!-- -->            
+  <br><br><br>
+    <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px; height: 10px;">
+      <h1 class="display-5 mb-3 headerfont">1:1문의 목록</h1>
+  </div> 
+  <br><br>
+  <div class="container text-center">
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col">
+      </div>
+      <div class="col">
+        <div style="text-align: center;" >
+          <form th:action="@{/chat/rooms}" method="get">
+              <input class="search-txt" type="text" name="userid" placeholder="제목으로 검색하기">
+                  <button style=" border:none;background-color:white"type="submit">
+                      <svg style="width: 15px;"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                      <path style="margin-bottom: 50px;" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg>
+                  </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+
+    <!-- <h3>목록</h3> -->
+   
+    <div class="container" style="text-align: center;">
+        <table class="table table-hover" style="text-align: center;">
+            <thead>
+              <tr>
+                <!-- <th style="width: 20px;"></th> -->
+                <th style="width: 200px;">번호</th>
+                <th style="width: 300px;">roomid</th>
+                <th style="width: 300px;">날짜</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="tmp, idx : ${list}">
+                <th th:text="${idx.size - idx.index}"></th>
+                <td>
+                  <a th:href="@{/chat/admin/room(roomid=${tmp.roomid})}">[[${tmp.roomid}]]</a>
+                </td>
+                <td th:text="${tmp.date}"></td>
+              </tr>
+            </tbody>
+        </table>
+        <th:block th:each="i : ${#numbers.sequence(1, pages)}" >
+          <a class="a-link" th:href="@{/chat/rooms(page=${i}, userid=${param.userid})}" th:text="${i}"></a>
+        </th:block>
+    </div>
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+
+</body>
+</html>

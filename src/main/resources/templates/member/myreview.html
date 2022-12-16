@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/Reviewselectlist.css}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <title>내가 작성한 리뷰목록</title>
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+</head>
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/002.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+     
+    
+    <!-- 목록 시작 -->
+    <div class="container-xxl py-6 border" style="margin-top: 100px;">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-10 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3 headerfont">My Review</h1>
+                <p style="text-align: center;">내가 작성한 리뷰 목록.</p>
+                <hr />
+                <div style=" margin: auto; min-width: 300px; max-width: 100%; width: 800px;">
+            
+                    <div th:each="tmp, idx :${list}" style="text-align: center;">
+                        <hr style="height:1px; border:0; background: rgb(106, 106, 106);"/>
+                        
+                        <div style="text-align: left;">
+                            <!-- <span style="float: left;" th:text="${tmp.no}"></span> -->
+            
+                            <div style="padding-bottom: 10px;">
+                                <span><!-- 유저 이미지 -->
+                                    <img th:src="@{${tmp.profileurl} }" style="width: 40px; border-radius: 70%; padding: 0;">
+                                </span>
+                                
+                                <span th:text="${tmp.userid}"></span>
+                                <font size="2em">
+                                    <span style="float: right; " th:text="${tmp.regdate}"></span>
+                                </font><br>
+
+                                <strong>
+                                    <font size="1em">
+                                        <a th:href="@{/product/productone.do(no=${tmp.productno})}"><p style="color:  rgb(44, 102, 144);" th:text="${tmp.name}"></p></a>
+                                    </font>
+                                </strong>
+                            </div>
+                            <div th:if="${tmp.userid == userid}">
+                                <a style="float: right; padding-top: 0px;" th:href="@{/review/update.do(no=${tmp.no})}">
+                                    수정하기
+                                </a>
+                            </div>
+            
+                            <!-- 이미지 확대+ 이미지 정렬 start =========================================================== padding-top: 10px;padding-bottom: 10px;-->
+                            <th:block th:each="tmp1 , idxx: ${tmp.image}">
+                                <img class="img" th:src="@{${tmp1}}" th:data-tmp1="${tmp1}" style="display: inline-block; max-width: 150px; width: 150px; height: 160px; " data-bs-toggle="modal" data-bs-target="#reviewimgModalForm"  />
+                            </th:block>
+            
+                            <div class="modal fade" id="reviewimgModalForm" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel"  aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                        
+                                  <!--Content-->
+                                  <div class="modal-content">
+                        
+                                    <!--Body-->
+                                    <div class="modal-body">
+                                      <div>
+                                        <img class="img" id="modalimage" style="width: 1000%; text-align: center; margin: auto; min-width: 300px; max-width: 100%; " />
+                                      </div>
+                                    </div>     
+                                  </div>
+                                  <!--/.Content-->
+                        
+                                </div>
+                              </div>
+                              <!-- 이미지 확대+ 이미지 정렬 end =========================================================== -->
+            
+                            
+                            <br>
+            
+                                <font size="5em"><p th:text="${tmp.title}"></p></font>
+                            <div style="min-width: 300px; max-width: 100%; width: 800px;">
+                                <p th:text="${tmp.content}"></p>
+                            </div>
+            
+            
+                           
+                            <span> <!-- 좋아요 시작 -->
+            
+                                <span th:if="${session.LOGIN != null}" >
+                                    <img th:src="@{/img/Review/likeEmpty.png}" style="width: 15px;">
+                                </span>
+            
+                                <font size="2em"><span th:text="${tmp.count}"></span></font>
+            
+                            </span><!-- 좋아요 끝 -->
+                            
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+        <hr style="height:1px; border:0; background:rgb(106, 106, 106);"/>
+
+
+        
+        <div style="font-size: 1.5em; text-align: center;" >
+            <th:block th:each="i : ${#numbers.sequence(1, pages)}" style="margin: auto;">
+                <a th:href="@{/member/orderinfo/myreview.do(page=${i})}" th:text="${i}"></a>
+            </th:block>
+        </div>
+    </div>
+        
+    <!-- 목록 끝 =============================================  -->
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+
+    <!-- 이미지 모달창================================================== -->
+    <script>
+        $(document).ready(function() {     
+            $('#reviewimgModalForm').on('show.bs.modal', function(event) {          
+                var tmp1 = $(event.relatedTarget).data('tmp1');
+                console.log(tmp1);
+
+                document.getElementById('modalimage').setAttribute("src", `[[@{/review/image?no=}]]` + tmp1.slice(17, 20));
+            });
+        });
+
+        
+    </script>
+
+</body>
+
+</html>

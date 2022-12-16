@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자-추천목록</title>
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+
+    <style>
+        .basketrowcmd, .sumcount, .summoney{
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .abutton, .abutton:link, .abutton:visited, .abutton:active, input[type=button] {
+        background-color: #383838;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        cursor: pointer;
+        letter-spacing: -1px;
+        padding: 3px 5px;
+        margin: 2px 3px;
+        width: auto;
+        word-break: keep-all;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9375em;
+    }
+    </style>
+</head>
+<body>
+
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    <input type="hidden" th:value="${tab}" id="tabvalue" />
+    <div class="col-lg-10 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+        <ul class="nav nav-pills d-inline-flex justify-content-end mb-5" style="margin-top: 50px;" role="tablist">
+            <li class="nav-item me-2">
+                <a class="btn btn-outline-primary border-2" id="item" data-bs-toggle="tab" href="#item" role="tab" aria-controls="tap_item" aria-selected="true" data-bs-target="#tap_item" >음료, 디저트 목록</a>
+            </li>
+            <li class="nav-item me-2">
+                <a class="btn btn-outline-primary border-2" id="background" data-bs-toggle="tab" href="#background" role="tab" aria-controls="tap_background" aria-selected="true" data-bs-target="#tap_background">category 배경image</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content profile-tab" id="myTabContent">
+
+        <div class="container-xxl tab-pane fade py-6" style="text-align: center;"  id="tap_item" role="tabpanel" aria-labelledby="item">
+    
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <p class="display-5 mb-3" style="font-size: x-large;">추천 아이템 리스트</p>
+            </div>
+            <div>
+                <select style="float: right;" id="category">
+                    <option value="">전체</option>
+                    <option th:value="D">눈</option>
+                    <option th:value="C">비</option>
+                    <option th:value="A">맑음</option>
+                    <option th:value="B">흐림</option>
+                    <option th:value="F">추움</option>
+                    <option th:value="E">더움</option>
+                </select>
+            </div>
+            <form th:action="@{/admin/recommend/deletemany.do}  " method="post" id="deleteform">
+                <table class="table table-hover" style="vertical-align: middle;">
+                    <thead>
+                        <th></th>
+                        <th>#</th>
+                        <th>name</th>
+                        <th>category</th>
+                        <th>foodcategory</th>
+                        <th>image</th>
+                    </thead>
+                    <tbody>
+                        <tr th:each="tmp, idx : ${list}">
+                            <td><input type="checkbox" name="chkno" th:value="${tmp.no}"></td>
+                            <td th:text="${idx.index + 1}"></td>
+                            <td th:text="${tmp.product.name}"></td>
+                            <td th:text="${tmp.category.category}"></td>
+                            <td th:text="${tmp.product.category}"></td>
+                            <td>
+                                <img th:src="@{${tmp.productimageurl} }" style="width: 100px;" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align: center; font-size: 1.5em;">
+                    <th:block th:each="i : ${#numbers.sequence(1, count)}" style="margin: auto;">
+                        <a th:href="@{/admin/recommend/category/selectlist.do(page=${i})}" th:text="${i}"></a>
+                    </th:block>
+                </div>
+                <div class="right-align basketrowcmd">
+                    <a th:href="@{/admin/recommend/insert.do}" class="abutton">추가하기</a>
+                    <input class="abutton" type="submit" value="선택상품삭제" />
+                </div>
+            </form>
+        </div>
+        <div class="container-xxl tab-pane fade py-6" style="text-align: center;"  id="tap_background" role="tabpanel" aria-labelledby="tap_background">
+            <div class="section-header text-center mx-auto mb-5" style="max-width: 500px;">
+                <p class="display-5 mb-3" style="font-size: x-large;">추천 background_image list</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=A}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-brightness-high-fill"></i></big>
+                            <big class="me-3">맑음</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="A" name="code" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=B}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-clouds-fill"></i></big>
+                            <big class="me-3">흐림</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="B" name="code" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=C}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-cloud-rain-heavy-fill"></i></big>
+                            <big class="me-3">비</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="C" name="code" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=D}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-cloud-snow"></i></big>
+                            <big class="me-3">눈</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="D" name="code" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=E}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-thermometer-high"></i></big>
+                            <big class="me-3">더움</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="E" name="code" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <img name="recoimg" th:src="@{/admin/recommend/imageselect?code=F}" style="width: 400px; height: 400px;" alt="">
+                    <div class="bg-light p-4">
+                        <div class="text-muted border-top pt-4">
+                            <big class="me-3"><i class="bi bi-thermometer-low"></i></big>
+                            <big class="me-3">추움</big>
+                        </div>
+                        <form th:action="@{/admin/recommend/backgroundimage.do}" method="post" name="backimgform" enctype="multipart/form-data" >
+                            <input type="file" style="display: none;" accept="image/*" name="file" />
+                            <input type="hidden" th:value="F" name="code" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+
+    <script>
+        var category = document.getElementById('category');
+        
+        category.addEventListener('change' , function(){
+            
+            window.location.href = "[[@{/admin/recommend/category/selectlist.do?category=}]]" + this.value;
+        });
+        
+    </script>
+    <script>
+        var category = document.getElementById('category');
+        window.addEventListener('load' , function(){
+
+            const urlParams = new URL(location.href).searchParams;
+
+            const params    = urlParams.get('category');
+            
+            const len       = category.options.length;
+            console.log(len);
+            for(let i=0; i<len; i++){
+
+                if(category.options[i].value == params){
+                    category.options[i].selected = true;
+                }
+                
+            };
+
+        });
+    </script>
+
+    <script>
+        
+        // 일괄삭제버튼 체크박스 유효성 검사
+        const chklist   = document.getElementsByName('chkno');
+        document.querySelector("#deleteform").addEventListener("submit", function(e){
+            console.log(chklist.length);
+            if(chklist.length == 0){
+                alert('체크한 항목이 없습니다.');
+                //이벤트 객체의 함수를 이용해서 폼 전송 막아주기 
+                e.preventDefault();
+            }
+        });
+    </script>
+
+    <script>
+        var image = document.getElementsByName('recoimg');
+        var file  = document.getElementsByName('file');
+        var form  = document.getElementsByName('backimgform');
+        var tab2  = document.getElementById('background');
+        for(let i=0; i<image.length; i++){
+           
+            image[i].addEventListener('click', function(){
+                file[i].click();
+            });
+
+            file[i].addEventListener('change', function(e){
+                // if(e.target.files[0]){//첨부함
+                //     console.log('T');
+                //     image[i].src=URL.createObjectURL(e.target.files[0]);
+                // }
+                // else{//첨부안함
+                //     console.log('F');
+                //     image[i].src="[[@{/img/image.png}]]";
+                // }
+                
+                backimgform[i].submit();
+            });
+
+        };
+
+    </script>
+
+    <script>
+        var tabvalue        = document.getElementById('tabvalue');
+        var item            = document.getElementById('item');
+        var background      = document.getElementById('background');
+        var tap_item        = document.getElementById('tap_item');
+        var tap_background  = document.getElementById('tap_background');
+
+        window.addEventListener('load', function(){
+            console.log(tabvalue.value);
+            if( tabvalue.value == 1){
+                item.classList.add('active');
+                tap_item.classList.add('show');
+                tap_item.classList.add('active');
+                background.classList.remove('active');
+                tap_background.classList.remove('show');
+                tap_background.classList.remove('active');
+                // item.click();
+            }
+            else if(tabvalue.value == 2){
+                background.classList.add('active');
+                tap_background.classList.add('show');
+                tap_background.classList.add('active');
+                item.classList.remove('active');
+                tap_item.classList.remove('show');
+                tap_item.classList.remove('active');
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.weatherMapper">
+
+    <insert id="insertWeatherList" parameterType="list">
+
+        <foreach collection='list' index='i' item='item' separator='; '>
+            INSERT INTO WEATHERTBL(NO, BASE_DATE, BASE_TIME, CATEGORY, FCST_DATE, FCST_TIME, FCST_VALUE, NX, NY ) 
+            VALUES( #{i}+1 ,#{item.baseDate}, #{item.baseTime}, #{item.category}, #{item.fcstDate}, #{item.fcstTime}, 
+           #{item.fcstValue}, #{item.nx}, #{item.ny})
+        </foreach>
+
+    </insert>
+
+    <delete id="deleteWeatherData" >
+        DELETE FROM WEATHERTBL CASCADE
+    </delete>
+
+    <select id="selectWeatherListDTO" parameterType="map" resultType="String">
+        SELECT FCST_VALUE FROM WEATHERTBL WHERE FCST_DATE = #{date} AND FCST_TIME= #{time} AND CATEGORY = #{category}
+    </select>
+</mapper>

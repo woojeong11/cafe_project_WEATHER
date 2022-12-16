@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>아이디/비밀번호 찾기</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+
+    <!-- css -->
+    <link th:href="@{/css/findidpw.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/002.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+
+    <div class="container-xxl py-6 border" style="text-align: center; margin-top: 100px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <p class="display-5 mb-3" style="font-size: x-large;">아이디/비밀번호 찾기</p>
+        </div>
+
+        <section id="tabs" class="project-tab" th:if="${pwcode == null}">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-md-12">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" data-bs-target="#nav-home" aria-selected="true">아이디 찾기</a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" data-bs-target="#nav-profile" aria-selected="false">비밀번호 찾기</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <form th:action="@{/member/findid.do}" method="get">
+                                    <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                                        <div class="col-md-6">
+                                            <label>현재 회원정보에 등록된 Email</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" style="text-align: center;" name="email" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                                        <div class="col-md-6">
+                                            <label>현재 회원정보에 등록된 연락처</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" style="text-align: center;" name="phone" id="findidphone" />
+                                        </div>
+                                    </div>
+                                    <div class="row" th:if="${id != null}" style="margin-top: 30px;">
+                                        <div class="col-md-6">
+                                            <label>회원님의 아이디는</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p th:text="${id}" style="float: left; color: dodgerblue;"></p>
+                                            <label style="float: left;"> 입니다.</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 30px;" type="submit" value="아이디찾기">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <form th:action="@{/member/findpw.do}" method="get">
+                                    <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                                        <div class="col-md-6">
+                                            <label>아이디를 입력해 주세요</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" style="text-align: center;" name="userid" />
+                                        </div>
+                                    </div>
+                                    <div class="row" >
+                                        <div class="col-md-12">
+                                            <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 30px;" type="submit" value="비밀번호찾기">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container" th:if="${pwcode != null}">
+            <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                <input type="hidden" th:value="${pwcode}" id="modelpwcode" />
+                <strong>
+                    <p style="color: rgb(44, 102, 144);">현재 회원 정보에 등록된 이메일로 인증번호가 발송되었습니다.</p>
+                </strong>
+                <div class="col-md-6">
+                    <label>인증번호를 입력해 주세요</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" style="text-align: center;" id="pwcode" />
+                    <div class="valid-feedback">
+                    </div>
+                    <div class="invalid-feedback">
+                        인증코드가 일치하지 않습니다.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 30px;" type="button" id="pwcodebtn" value="인증하기">
+                </div>
+            </div>
+            <form th:action="@{/member/findpw/passwordupdate.do}" id="findpwpasswordbtn" method="post">
+                <div id="pwupdatediv" style="display: none;">
+                    <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                        <input type="hidden" th:value="${param.userid}" name="userid" />
+                        <div class="col-md-6">
+                            <label>사용하실 새 비밀번호를 입력해주세요.</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control is-invalid" name="password" id="findpwpassword" style="text-align: center;" />
+                            <div class="valid-feedback" >
+                            </div>
+                            <div class="invalid-feedback" id="userpwinvalid">
+                                5~20자리 이내로 영문,숫자,특수문자 중 2가지 이상을 혼합하여 입력해주세요.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 30px; vertical-align: middle;">
+                        <div class="col-md-6">
+                            <label>사용하실 새 비밀번호를 다시 입력해주세요.</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control is-invalid" id="findpwpassword1" style="text-align: center;" />
+                            <div class="valid-feedback" >
+                            </div>
+                            <div class="invalid-feedback">
+                                비밀번호가 일치하지 않습니다.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="btn btn-primary rounded-pill py-2 px-4" style="margin-top: 30px;"  type="submit" value="수정하기">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        document.querySelector("#findidphone").addEventListener('input', function(){
+            // 하이픈 자동입력
+            this.value = this.value
+                            .replace(/[^0-9]/g, '')
+                            .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+        
+        });
+
+    </script>
+
+    <script>
+        document.getElementById("pwcodebtn").addEventListener('click',  function(){
+            // 입력한 인증코드
+            var inputpwcode = document.getElementById("pwcode").value;
+            console.log(inputpwcode);
+            // controller에서 보낸 code(정답값)
+            var pwcode      = document.getElementById("modelpwcode").value;
+            console.log(pwcode);
+            if(inputpwcode != pwcode){
+                document.getElementById("pwcode").classList.remove("is-valid");
+                document.getElementById("pwcode").classList.add("is-invalid");
+            }
+            else{
+                document.getElementById("pwcode").classList.remove("is-invalid");
+                document.getElementById("pwcode").classList.add("is-valid");
+                document.getElementById("pwupdatediv").style.display="block";
+            }
+        });
+    </script>
+
+    <script>
+        var isuserpwValid   = false;
+
+        var isuserpw2Valid  = false;
+
+         // 비밀번호 입력칸 유효성 검사
+         document.querySelector("#findpwpassword").addEventListener('input', function(){
+            
+            // 1. 입력한 value의 값을 불러온다.
+           let inputuserpw = this.value;
+            
+            // isuserpwValid
+            // 변수 값들
+            var num = inputuserpw.search(/[0-9]/g);
+            var eng = inputuserpw.search(/[a-z]/ig);
+            var spe = inputuserpw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+            
+            console.log(inputuserpw.search(/\s/));
+            // 유효성검사 자격 미달시 나오는 멘트의 div 
+            const userinvalid = document.getElementById('userpwinvalid');
+            
+            // 2. 유효성 검사 기준
+            // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가 
+            if(inputuserpw.length < 5 || inputuserpw.length > 20 || (num < 0 && eng < 0) || (eng < 0 && spe < 0) || (spe < 0 && num < 0)){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "5~20자리 이내로 영문,숫자,특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
+                isuserpwValid=false;              
+            }
+            else if(inputuserpw.search(/\s/) != -1){
+                this.classList.remove("is-valid");
+                this.classList.add("is-invalid");
+                userinvalid.textContent = "비밀번호는 공백 없이 입력해주세요.";
+                isuserpwValid=false;
+            }
+            else {
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+                isuserpwValid=true;
+            }
+            
+
+       });
+           
+
+       // 비밀번호 확인칸 유효성 검사
+       document.querySelector("#findpwpassword1").addEventListener('input', function(){
+           
+           // userpw 폼의 값을 불러옴
+           let inputuserpw  = document.getElementById("findpwpassword").value;
+
+           // 1. 입력한 value의 값을 불러온다.
+           let inputuserpw1 = this.value;
+
+           // 2. 유효성 검사 기준
+           // 3. 유효하다면 input 요소에 is-valid 클래스 추가, 아니라면 is-invalid 클래스 추가
+           if( inputuserpw == inputuserpw1 ){
+                isuserpw2Valid = true;
+               this.classList.remove("is-invalid");
+               this.classList.add("is-valid");
+           }
+           else{
+                isuserpw2Valid = false;
+               this.classList.remove("is-valid");
+               this.classList.add("is-invalid");
+           }
+       });
+
+       // 폼에 submit 이벤트가 일어 났을때 실행할 함수 등록
+       document.querySelector("#findpwpasswordbtn").addEventListener("submit", function(e){
+            //만일 폼이 유효하지 않는다면 전송을 막아주기
+            if(!isuserpwValid || !isuserpw2Valid ){
+                //이벤트 객체의 함수를 이용해서 폼 전송 막아주기 
+                e.preventDefault();
+                alert('양식에 맞게 입력해 주세요!');
+            }
+        });
+    </script>
+</body>
+
+</html>

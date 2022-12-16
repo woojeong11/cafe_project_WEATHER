@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>관리자-주문완료내역</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
+    <style>
+        .search-txt{
+            margin: 14px;
+            width: 160px;
+            height: 30px;
+            border-radius: 10px;
+            text-align: center;
+            /* border-radius: 2px; */
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+
+    <!-- Page Header Start -->
+    <header class="py-5 bg-image-full" style="background: url(../../img/header/005.png) ; background-size: cover; width: 100%; height: 400px;">
+    </header>
+    <!-- Page Header End -->
+    <div class="container-xxl py-3 border" style="margin-top: 100px;">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-10 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-5 mb-3 headerfont">주문완료내역</h1>
+                <div class="row">
+                    <div class="col-8" style="display: table;">
+                        <span style="display: table-cell; vertical-align: middle; text-align: right; padding-right: 20px;">주문완료 상품들입니다.</span>
+                    </div>
+                    <div class="col-4">
+                        <form th:action="@{/admin/order/orderlist.do}" method="get">
+                            <input class="search-txt" style="float: left;" type="text" name="userid" placeholder="id를 입력해주세요.">
+                            <button style=" border:none;background-color:white; margin-top: 16px; margin-right: 2px;" type="submit">
+                                <svg style="width: 15px; left: 0px;"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <hr />
+                <div th:each="tmpp , idx : ${list}">
+                    <div class="border my-3">
+                        <br />
+                        <div class="row text-start">
+                            <div>
+                                <strong class="fontmalgun" style="display: inline-block; margin-left: 100px;" th:text="| 결제번호 : ${tmpp.pList[0].paycode}|"></strong>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col">
+                                <strong class="fontmalgun" style="display: inline-block;" th:text="| id : ${tmpp.pList[0].userid}|"></strong>
+                            </div>
+                            <div class="col">
+                                <strong class="fontmalgun" style="display: inline-block;" th:text="| 총금액 : ${tmpp.pList[0].tprice}원|"></strong>
+                            </div>
+                        </div>
+                        <br />
+                        <div th:each="tmp, idx : ${tmpp.pList}">
+                            <div class="border my-3 mx-auto" style="max-width: 500px;">
+                                <span style="font-weight: bold; color: #111111; font-size: 20px; float: left; margin-top: 10px; margin-left: 35px;">주문완료</span>
+                                <br />
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <img th:src="@{${tmp.productimageurl} }" style="width: 50%; " alt="">
+                                    </div>
+                                    <div class="col-sm-6" style="text-align: left;">
+                                        <h5 class="fontmalgun" style="top: 25%; position: relative;" th:text="${tmp.productname}"></h5>
+                                        <br />
+                                        <div style="margin-top: 20px;">
+                                            <p style="float: left;" th:text="${tmp.price*tmp.quantity  + '원  '}"></p>
+                                            <p style="float: left; margin-left: 20px;" th:text="${tmp.quantity + '개'}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mt-5">
+                                <h5 class="fontmalgun" style="top: 25%; position: relative;">받는사람 정보</h5>
+                            </div>
+                            <div class="mt-3" style="border-top :2px solid #111111; border-bottom: 1px solid #cccccc; text-align: left;">
+                                <div class="mt-3 row">
+                                    <div class="col-sm-3">
+                                        <label>연락처</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <small th:text="${tmpp.aList[0].phone}"></small>
+                                    </div>
+                                </div>
+                                <div class="mt-3 row">
+                                    <div class="col-sm-3">
+                                        <label>이메일</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <small th:text="${tmpp.aList[0].email}"></small>
+                                    </div>
+                                </div>
+                                <div class="mt-3 row">
+                                    <div class="col-sm-3">
+                                        <label>받는주소</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <small th:text="${tmpp.aList[0].address}"></small>
+                                    </div>
+                                </div>
+                                <div class="mt-3 row">
+                                    <div class="col-sm-3">
+                                        <label>배송요청사항</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <small th:if="${tmpp.pList[0].msg != null}" th:text="${tmpp.pList[0].msg}"></small>
+                                        <small th:if="${tmpp.pList[0].msg == null}">요청사항 없음.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="height:1px; border:0; background:rgb(106, 106, 106);"/>
+
+                <div style="font-size: 1.5em; text-align: center;" >
+                    <th:block th:each="i : ${#numbers.sequence(1, pages)}" style="margin: auto;">
+                        <a th:href="@{/member/orderinfo/ing.do(page=${i}, userid=${param.userid})}" th:text="${i}"></a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+
+    
+</body>
+
+</html> 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="/fragments/admin/head.html :: head"></th:block>
+    <title>관리자-자주묻는질문등록</title>
+</head>
+<body>
+    <div th:replace="/fragments/admin/navbar.html :: navbarfragment"></div>
+
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/005.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    
+    <!-- <form th:action="@{/faq/insert.do}" method="post">
+        <input type="text" name="title" placeholder="제목"/><br/>
+        <input type="text" name="content" placeholder="내용"/><br/>
+
+        <input type="submit" value="등록"/>
+    </form> -->
+
+<!-- ============================================================================================== -->
+    <div class="container" id="boody" style="padding-top: 20px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3">FAQ 등록페이지</h1>
+        </div>
+
+        <div class="row g-5 justify-content-center">
+            <form th:action="@{/faq/admininsert.do}" method="post">
+                <div class="row g-3">
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="subject" placeholder="Subject" name="title">
+                            <label for="subject">제목</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 200px" name="content"></textarea>
+                            <label for="message">내용</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button  id="insertFaq" class="btn btn-primary rounded-pill py-3 px-5" type="submit" th:onclick="|javascript:insertAction()|">등록하기</button>
+                    </div>
+
+                </div>
+                
+            </form>
+            <div class="col-12" style="padding-top: 10px;">
+                <a th:href="@{/faq/adminselectlist.do}">
+                    <button style="position: relative; left:180px; bottom:117px;"  class="btn btn-primary rounded-pill py-3 px-5" type="submit">목록</button>
+                </a>
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <div th:replace="/fragments/admin/footer.html :: footerfragment"></div>
+
+    <script>
+        const insertAction = () =>{
+            alert('등록되었습니다.');
+            document.getElementById('insertFaq').submit();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ReviewImageMapper">
+
+        <!-- 이미지등록--> 
+        <insert id="ReviewImageinsert" parameterType="com.example.dto.ReviewImageDTO">
+                INSERT INTO REVIEWIMAGETBL (NO, IMAGENAME,IMAGESIZE, IMAGETYPE,IMAGEDATA, REGDATE, REVIEWNO)
+                VALUES(SEQ_REVIEWIMAGE_NO.NEXTVAL,#{imagename}, #{imagesize} ,#{imagetype} ,#{imagedata, jdbcType=BLOB} ,CURRENT_TIMESTAMP,#{reviewno})
+        </insert>
+
+        <!-- 이미지리스트조회 -->
+        <select id="selectReviewImage" parameterType="long" resultType="Long">
+                SELECT R.NO FROM REVIEWIMAGETBL R WHERE R.REVIEWNO=#{reviewno}
+        </select>
+
+        <!-- 이미지게시물1개선택 -->
+        <resultMap id="retMap1" type="com.example.dto.ReviewImageDTO">
+                <result property="imagedata" column="IMAGEDATA" jdbcType="BLOB" javaType="[B" />
+        </resultMap>
+        <select id="selectImageone" parameterType="long" resultMap="retMap1">
+                SELECT R.* FROM REVIEWIMAGETBL R WHERE R.NO=#{no}
+        </select>
+
+
+        <!-- 이미지수정 -->
+        <update id="updateReviewImage" parameterType="com.example.dto.ReviewImageDTO">
+        UPDATE REVIEWIMAGETBL SET 
+               IMAGETYPE=#{imagetype}, 
+               IMAGENAME=#{imagename},
+               IMAGESIZE=#{imagesize}, 
+               IMAGEDATA=#{imagedata, jdbcType=BLOB}
+        WHERE NO=#{no}
+        </update>
+
+        <!-- 이미지 삭제 -->
+        <delete id="deleteReviewImage" parameterType="long">
+                DELETE FROM REVIEWIMAGETBL WHERE REVIEWNO=#{reviewno}
+        </delete>
+
+
+        <!-- 수정화면에서 이미지 하나씩 삭제 -->
+        <delete id="deleteimageone" parameterType="Long">
+                DELETE FROM REVIEWIMAGETBL WHERE NO=#{no} 
+        </delete>
+
+
+</mapper>
+

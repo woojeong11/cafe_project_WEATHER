@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ReviewScoreMapper">
+
+    <!-- 좋아요등록--> 
+    <insert id="insertReviewLike" parameterType="com.example.dto.ReviewScoreDTO">   
+        INSERT INTO REVIEWSCORETBL (NO, REGDATE,USERID,REVIEWNO)
+        VALUES( SEQ_REVIEWSCORE_NO.NEXTVAL, CURRENT_TIMESTAMP, #{userid}, #{reviewno} )
+    </insert>
+
+    <!-- 좋아요갯수 -->
+    <select id="CountReviewScore"  parameterType="long" resultType="long">
+        SELECT COUNT(*)CNT FROM REVIEWSCORETBL WHERE REVIEWNO=#{reviewno}
+    </select>
+
+	<!-- 좋아요삭제 -->
+	<delete id="Reciewlikesdelete" parameterType="com.example.dto.ReviewScoreDTO">
+		DELETE FROM REVIEWSCORETBL WHERE USERID=#{userid} AND REVIEWNO=#{reviewno}
+	</delete>
+
+	<!-- 좋아요가 있는지 확인 -->
+	<select id="ReviewFindlike" parameterType="com.example.dto.ReviewScoreDTO" resultType="com.example.dto.ReviewScoreDTO">
+        SELECT * FROM REVIEWSCORETBL WHERE USERID=#{userid} AND REVIEWNO=#{reviewno}
+    </select>
+
+    <!-- 리뷰no기반 좋아요삭제 -->
+	<delete id="deletereviewscore" parameterType="Long">
+		DELETE FROM REVIEWSCORETBL WHERE REVIEWNO=#{reviewno}
+	</delete>
+
+    <!-- 좋아요 상위 3개 리뷰넘버(메인에 베스트리뷰 3개)
+	<select id="likeCountthree">
+	SELECT 
+		R.REVIEWNO,COUNT(*)CNT
+		FROM REVIEWSCORETBL R
+		GROUP BY REVIEWNO=#{reviewno} ORDER BY CNT DESC LIMIT 3
+	</select> -->
+    
+
+</mapper>

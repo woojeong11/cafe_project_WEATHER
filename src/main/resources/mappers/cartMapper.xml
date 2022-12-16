@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CartMapper">
+
+    <insert id="inserCart" parameterType="com.example.dto.CartDTO">
+        INSERT INTO CARTTBL(NO,QUANTITY,SESSIONID, REGDATE, PRODUCTNO)
+        VALUES(SEQ_CART_NO.NEXTVAL,#{quantity},#{sessionid},CURRENT_TIMESTAMP,#{productno})
+    </insert>
+
+    <!-- 카트 추가 또는 수정 -->
+    <insert id="upsertCart" parameterType="com.example.dto.CartDTO">
+        MERGE INTO
+            CARTTBL
+        USING DUAL
+            ON PRODUCTNO=#{productno} AND sessionid = #{sessionid}
+        WHEN MATCHED THEN
+            UPDATE SET QUANTITY=quantity+#{quantity}, REGDATE=CURRENT_TIMESTAMP
+        WHEN NOT MATCHED THEN
+            INSERT(NO ,QUANTITY ,REGDATE ,SESSIONID ,PRODUCTNO)
+                VALUES(SEQ_CART_NO.NEXTVAL,#{quantity},CURRENT_TIMESTAMP,#{sessionid},#{productno})
+    </insert>
+
+
+
+    <!--SESSIONID별 아이템리스트  -->
+    <select id="selectList" resultType="com.example.dto.CartDTO">
+        SELECT * FROM CARTTBL WHERE SESSIONID=#{sessionid}
+    </select>
+
+    <!-- 카트에 담은 아이템정보 가져오기 -->
+     <select id="selectProduct" resultType="com.example.dto.ProductDTO">
+        SELECT * 
+            FROM PRODUCTTBL P
+            INNER JOIN CARTTBL C
+        ON (C.PRODUCTNO = P.NO)
+        WHERE C.SESSIONID=#{sessionid}
+    </select>
+    <!-- 장바구니용 디저트,음료 리스트 -->
+    <!-- <select id="selectDesertandDrink" resultType="com.example.dto.CartDTO">
+        SELECT P.CATEGORY,P.CONTENT,P.NAME,P.PRICE,P.REGDATE,C.NO,C.QUANTITY,C.SESSIONID,C.PRODUCTNO
+            FROM PRODUCTTBL P
+            INNER JOIN CARTTBL C
+            ON (C.PRODUCTNO = P.NO)
+        WHERE C.SESSIONID=#{sessionid} AND P.CATEGORY='디저트' OR P.CATEGORY='음료'
+    </select> -->
+
+
+    <!-- 장바구니용 디저트,음료 리스트 -->
+    <select id="selectDesertandDrink" resultType="com.example.dto.CartDTO" parameterType="String">
+        SELECT P.*,C.*, C.CNT*P.PRICE SUM FROM PRODUCTTBL P INNER JOIN(
+            SELECT C.PRODUCTNO, C.SESSIONID , SUM(C.QUANTITY) CNT
+            FROM CARTTBL C
+                WHERE C.SESSIONID=#{sessionid}
+                GROUP BY C.PRODUCTNO
+            ) C
+            ON P.NO=C.PRODUCTNO
+    </select>
+
+    <!-- 장바구니용 상품리스트 -->
+    <select id="selectGoods" resultType="com.example.dto.CartDTO" parameterType="String">
+        SELECT P.*,C.*, C.CNT*P.PRICE SUM FROM PRODUCTTBL P INNER JOIN(
+            SELECT C.PRODUCTNO, C.SESSIONID , SUM(C.QUANTITY) CNT
+            FROM CARTTBL C
+                GROUP BY C.PRODUCTNO
+            ) C
+            ON P.NO=C.PRODUCTNO
+        WHERE C.SESSIONID=#{sessionid} AND P.CATEGORY='goods'
+    </select>
+
+    <!-- 장바구니->오더1 수량일괄수정 -->
+    <update id="modifyCount" parameterType="list">
+        <!-- update carttbl set quantity=#{quantity} where productno=#{productno} -->
+        UPDATE CARTTBL SET
+            QUANTITY = (CASE 
+                <foreach collection="list" item="obj" separator=" ">
+                    WHEN PRODUCTNO=#{obj.productno} THEN #{obj.quantity}
+                </foreach> 
+            END)
+            WHERE PRODUCTNO IN( 
+                <foreach collection="list" item="obj" separator=", ">
+                    #{obj.productno}
+                </foreach> 
+            )
+    </update>
+
+    <!-- 1개선택 -->
+    <select id="selectone" resultType="com.example.dto.CartDTO" parameterType="Long">
+        SELECT * FROM CARTTBL WHERE productno=#{productno}
+    </select>
+
+    <!-- 카트전체목록 -->
+    <select id="selectall" resultType="com.example.dto.CartDTO">
+        SELECT * FROM CARTTBL
+    </select>
+
+    <!-- 1개 삭제 -->
+    <delete id="deleteone" parameterType="map">
+        delete from carttbl where productno=#{productno} AND SESSIONID=#{sessionid}
+    </delete>
+
+    <!-- 체크 된 것 일괄삭제 -->
+    <delete id="deleteCartBatch" parameterType="list">
+        DELETE FROM CARTTBL WHERE PRODUCTNO IN(
+            <foreach collection="list" item="tmp" separator=", ">
+                #{tmp}
+            </foreach>
+        )
+    </delete>
+
+    <!-- 장바구니 비우기 -->
+    <delete id="deleteall">
+        delete from carttbl
+    </delete>
+
+    <!-- 장바구니 비우기 -->
+    <delete id="deleteCart" parameterType="String" >
+        DELETE FROM CARTTBL WHERE SESSIONID=#{sessionid}
+    </delete>
+
+
+    <!--장바구니 갯수-->
+    <select id="countcart" parameterType="String" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM CARTTBL WHERE SESSIONID=#{sessionid}
+    </select>
+</mapper>

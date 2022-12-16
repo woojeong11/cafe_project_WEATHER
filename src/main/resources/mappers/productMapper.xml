@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProductMapper">
+    <!-- 시퀀스 꺼내기 -->
+    <select id="productSeq" resultType="long">
+        SELECT SEQ_PRODUCT_NO.NEXTVAL FROM DUAL
+    </select>
+
+    <!-- 아이템추가 -->
+    <insert id="insertProduct" parameterType="com.example.dto.ProductDTO">
+        INSERT INTO PRODUCTTBL(NO,NAME,PRICE,CONTENT,CATEGORY,REGDATE)
+        VALUES(#{no},#{name},#{price},#{content},#{category},CURRENT_TIMESTAMP)
+    </insert>
+
+    <!-- 아이템전체목록 -->
+    <select id="selectList" resultType="com.example.entity.Product">
+        SELECT * FROM PRODUCTTBL
+    </select>
+
+    <!-- 아이템삭제 -->
+    <delete id="deleteProduct" parameterType="Long">
+        DELETE FROM PRODUCTTBL WHERE NO=#{no}
+    </delete>
+    <!-- 아이템1개조회 -->
+    <select id="productOne" resultType="com.example.entity.Product">
+        SELECT * FROM PRODUCTTBL WHERE NO=#{no}
+    </select>
+
+    <!-- 아이템 카테고리별 목록 12개씩-->
+    <select id="selectCategoryList" resultType="com.example.dto.ProductDTO" parameterType="map">
+        SELECT * FROM (
+            SELECT I.*, ROW_NUMBER() OVER( ORDER BY NO ASC) ROWN FROM PRODUCTTBL I WHERE CATEGORY=#{category} ORDER BY NO ASC
+        ) WHERE ROWN BETWEEN #{start} and #{end}
+    </select>
+
+    <!--DTO전체아이템리스트  -->
+    <select id="selectListt" resultType="com.example.dto.ProductDTO">
+        SELECT * FROM PRODUCTTBL
+    </select>
+
+    <!-- 이전글다음글 .. 사용안함  -->
+    <select id="selectNextandPre" resultType="com.example.dto.ProductDTO" parameterType="Long">
+        SELECT A.*
+            FROM (SELECT B.*,
+            LEAD(NO,1,'0') OVER(ORDER BY REGDATE DESC) AS NEXT_NO,
+            LEAD(NAME,1,' ') OVER(ORDER BY REGDATE DESC) AS NEXT_NAME,
+            LAG(NO,1,'0') OVER(ORDER BY REGDATE DESC) AS PRE_NO,
+            LAG(NAME,1,' ') OVER(ORDER BY REGDATE DESC) AS PRE_NAME
+            FROM PRODUCTTBL B ORDER BY NO DESC
+        ) A
+            WHERE NO=#{no};
+    </select>
+   
+
+    <!--이전글-->
+    <select id="prevpageFAQ" parameterType="Long" resultType="Long">
+        SELECT NVL(MAX(NO),0) FROM PRODUCTTBL WHERE NO <![CDATA[<]]> #{no}
+    </select>
+
+    <!-- 다음글  -->
+    <select id="nextpageFAQ" parameterType="Long" resultType="Long">
+        SELECT NVL(MIN(NO),0) FROM PRODUCTTBL WHERE NO <![CDATA[>]]> #{no}
+    </select>
+
+    <!-- 랜덤3개 리스트 -->
+    <select id="randomProduct" resultType="com.example.dto.ProductDTO">
+            SELECT * FROM(
+                SELECT * FROM PRODUCTTBL ORDER BY DBMS_RANDOM.RANDOM()
+            ) 
+            WHERE ROWNUM &lt;= 3
+    </select>
+
+    <!-- 메인페이지용 랜덤12개 리스트 -->
+    <select id="mainRandomProduct" resultType="com.example.dto.ProductDTO" parameterType="map">
+        SELECT * FROM(
+            SELECT * FROM PRODUCTTBL WHERE CATEGORY=#{category} ORDER BY DBMS_RANDOM.RANDOM()
+            ) 
+        WHERE ROWNUM  &lt;= 12
+    </select>
+
+    <!--  페이지네이션 글개수 -->
+    <select id="countList" resultType="long" parameterType="String">
+        SELECT COUNT(*) CNT FROM PRODUCTTBL I WHERE I.CATEGORY=#{category}
+    </select>
+   
+    <!-- 카테고리별 목록 -->
+    <select id="selectCategory" resultType="com.example.dto.ProductDTO" parameterType="String">
+        SELECT I.* FROM PRODUCTTBL I WHERE CATEGORY=#{category} ORDER BY REGDATE DESC
+    </select>
+
+    <!-- 메인페이지용 판매순 리스트 8개 -->
+    <select id="mainSoldProduct" resultType="com.example.dto.ProductDTO" parameterType="map">
+    SELECT * FROM(
+        SELECT P.*,O.*, ROW_NUMBER() OVER( ORDER BY COUNT DESC) ROWN FROM PRODUCTTBL P INNER JOIN(
+            SELECT O.PRODUCTNO, COUNT(*) COUNT
+                FROM ORDERTBL1 O 
+                GROUP BY O.PRODUCTNO
+                ) O
+            ON P.NO=O.PRODUCTNO
+        WHERE CATEGORY=#{category} ORDER BY ROWN ASC
+    ) WHERE ROWN &lt;=8;
+    </select>
+   
+
+
+</mapper>

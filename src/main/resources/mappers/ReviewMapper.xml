@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.ReviewMapper">
+
+    <!-- 등록 -->
+    <insert id="insertReview" parameterType="com.example.dto.ReviewDTO">
+        INSERT INTO REVIEWTBL(NO,CONTENT,TITLE,HIT,USERID, PRODUCTNO, REGDATE)
+        VALUES(#{no}, #{content} , #{title} , 0 , #{userid} , #{productno} , CURRENT_TIMESTAMP)
+    </insert>
+    
+    <!-- 페이지네이션 목록 parameterType="com.example.dto.ReviewDTO"-->
+    <select id="selectlistReview" resultType="com.example.dto.ReviewDTO">
+        <!-- SELECT * FROM (
+            SELECT R.*, ROW_NUMBER() OVER (ORDER BY R.NO DESC) ROWN FROM REVIEWTBL R
+        ) WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC -->
+
+        SELECT * FROM(
+            SELECT 
+            TO_CHAR(R.REGDATE,'YYYY-MM-DD HH24:MI:SS') REGDATE1,P.NAME, R.*,
+            ROW_NUMBER() OVER (ORDER BY R.NO DESC) ROWN
+            FROM REVIEWTBL R
+            INNER JOIN PRODUCTTBL P
+            ON (R.PRODUCTNO = P.NO)
+        ) WHERE ROWN BETWEEN #{start} AND #{end}  ORDER BY NO DESC
+    </select>
+
+    <!--갯수  -->
+    <select id="ReviewCount" resultType="long">
+        SELECT COUNT(*) CNT FROM REVIEWTBL
+    </select>
+
+    <!-- 시퀀스 -->
+    <select id="reviewNumber" resultType="long">
+        SELECT SEQ_REVIEW_NO.NEXTVAL FROM DUAL
+    </select>
+
+    <!-- 글 한개조회--> 
+    <select id="selectOneReview" resultType="com.example.dto.ReviewDTO" parameterType="long">
+        SELECT R.* FROM REVIEWTBL R WHERE R.NO=#{no}
+    </select>
+
+    <!-- 수정 -->
+    <update id="updateReview" parameterType="com.example.dto.ReviewDTO">
+        UPDATE REVIEWTBL SET CONTENT=#{content},TITLE=#{title} WHERE USERID=#{userid} AND NO=#{no}
+    </update>
+
+    <!-- 글 삭제 -->
+    <delete id="deleteReview" parameterType="long">
+        DELETE FROM REVIEWTBL WHERE NO=#{no}
+    </delete>
+
+    <!-- 글3개--> 
+    <select id="ReviewSelectThree" resultType="com.example.dto.ReviewDTO" parameterType="long">
+        SELECT R.* FROM REVIEWTBL R WHERE R.NO=#{no}
+    </select>
+
+    <!-- 베스트 리뷰용 select -->
+    <resultMap type="map" id="selectBestresult">
+        <result property="CONTENT" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="selectBest" resultMap="selectBestresult" parameterType="map">
+        SELECT A.*, P.NAME  FROM
+        (SELECT * FROM
+        (SELECT  R.REVIEWNO, COUNT(R.REVIEWNO) CNT, ROW_NUMBER() OVER (ORDER BY R.REVIEWNO DESC) ROWN  FROM REVIEWSCORETBL R GROUP BY REVIEWNO ORDER BY CNT DESC) RS
+        INNER JOIN REVIEWTBL RC ON RS.REVIEWNO = RC.NO AND ROWN BETWEEN #{start} AND #{end}) A INNER JOIN PRODUCTTBL P ON A.PRODUCTNO = P.NO 
+    </select>
+
+    <!--내가 작성한 리뷰 목록-->
+    <select id="selectlistmyreview" resultType="com.example.dto.ReviewDTO" parameterType="map">
+        SELECT RC.*, P.NAME FROM (SELECT * FROM (
+            SELECT R.*, ROW_NUMBER() OVER (ORDER BY R.NO DESC) ROWN FROM REVIEWTBL R WHERE USERID = #{userid}
+        ) WHERE ROWN BETWEEN #{start} AND #{end} ORDER BY NO DESC) RC INNER JOIN PRODUCTTBL P ON RC.PRODUCTNO = P.NO
+    </select>
+
+    <select id="myReviewCount" parameterType="String" resultType="long">
+        SELECT COUNT(*) CNT FROM REVIEWTBL WHERE USERID = #{userid}
+    </select>
+
+
+</mapper>
+
+<!-- update, delete, insert 는 반환타입(resultType타입이 없다) -->

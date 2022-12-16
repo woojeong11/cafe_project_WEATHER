@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProductImageMapper">
+
+<insert id="insertImage" parameterType="com.example.dto.ProductImageDTO">
+        INSERT INTO PRODUCTIMAGETBL(NO,IMAGEDATA,IMAGENAME,IMAGESIZE,IMAGETYPE,REGDATE,PRODUCTNO)
+        VALUES(SEQ_PRODUCTIMAGE_NO.NEXTVAL,#{imagedata},#{imagename},#{imagesize},#{imagetype},CURRENT_TIMESTAMP,#{productno})
+</insert>
+
+<!-- 이미지목록 --> 
+<select id="selectimageList" parameterType="long" resultType="com.example.dto.ProductImageDTO">
+    SELECT I.NO FROM PRODUCTIMAGETBL I WHERE I.PRODUCTNO=#{productno}
+</select>
+
+<!--물품번호를 전달하면 대표이미지 1개의 이미지번호를 반환 -->
+<select id="selectImageNoOne" parameterType="long" resultType="long">
+        SELECT NVL(MIN(I.NO),0) NO
+        FROM PRODUCTIMAGETBL I 
+        WHERE I.PRODUCTNO=#{productno}
+</select>
+
+<!--물품번호를 전달하면 대표이미지 1개의 이미지번호를 반환 -->
+<select id="selectImageNoOne2" parameterType="long" resultType="com.example.dto.ProductImageDTO">
+        SELECT NVL(MIN(I.NO),0) NO
+        FROM PRODUCTIMAGETBL I 
+        WHERE I.PRODUCTNO=#{productno}
+</select>
+
+<!-- 이미지게시물1개선택 -->
+<resultMap id="retMap1" type="com.example.dto.ProductImageDTO">
+        <result property="imagedata" column="IMAGEDATA" 
+        jdbcType="BLOB" javaType="[B" />
+</resultMap>
+<select id="selectImageOne" parameterType="long" resultMap="retMap1">
+        SELECT I.* FROM PRODUCTIMAGETBL I WHERE I.NO=#{no}
+</select>
+
+<!-- 물품번호로 안에있는 이미지일괄삭제 -->
+<delete id="deleteImageBatch" parameterType="long">
+        DELETE FROM PRODUCTIMAGETBL WHERE PRODUCTNO=#{productno}
+</delete>
+
+<!-- 이미지삭제 -->
+<delete id="deleteImageOne" parameterType="Long">
+        DELETE FROM PRODUCTIMAGETBL WHERE NO=${no}
+</delete>
+
+<resultMap id="retMap2" type="com.example.dto.ProductImageDTO">
+        <result property="imagedata" column="IMAGEDATA" 
+        jdbcType="BLOB" javaType="[B" />
+</resultMap>
+<select id="selectImageOneByproductno" parameterType="Long" resultMap="retMap2">
+        SELECT I.* FROM PRODUCTIMAGETBL I WHERE I.PRODUCTNO=#{no}
+</select>
+
+
+</mapper>

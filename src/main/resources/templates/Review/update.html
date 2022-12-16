@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="/fragments/head.html :: head"></th:block>
+    <title>리뷰수정</title>
+    <style>
+        .input-file-button{
+            /* padding: 6px 25px; */
+            background-color:#FF6600;
+            border-radius: 46px;
+            color: white;
+            cursor: pointer;
+        }
+        
+    </style>
+</head>
+<body>
+    <div th:replace="/fragments/navbar.html :: navbarfragment"></div>
+    
+    <!-- header start-->
+    <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+        <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" th:src="@{/img/header/001.png}" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header End -->
+    
+    <!-- 업데이트 Start -->
+    <div class="container" id="boody" style="padding-top: 20px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3 headerfont">리뷰 수정</h1>
+        </div>
+        
+        <div class="row g-5 justify-content-center">
+
+            <!-- <div th:if="${not #lists.isEmpty(reviewimage)}">
+                <th:block th:each="tmp, idx : ${reviewimage}" >
+                    <form th:action="@{/review/updateimage.do}" style="display: inline-block;" method="post" enctype="multipart/form-data">
+                        <img th:src="@{/review/image(no=${tmp.no})}" name="rawimage" style="padding-bottom: 10px;width:200px; margin-left: 20px; cursor: pointer;">
+                        <input type="button" class="btn-close" name="closebtn" style="position: absolute;" />
+                        <input type="hidden" th:value="${no}" name="rawreviewno"/>
+                        <input type="hidden" th:value="${tmp.no}" name="rawno"/>
+                        <input type="file" style="display: none;" name="rawfile"/>
+                        <br />
+                        <input type="submit" style="margin-left: 75px;" value="수정하기" />
+                    </form>
+                </th:block>
+            </div> -->
+            <div id="imagesector">
+
+            </div>
+
+            <form id="updatereview" th:action="@{/review/update.do}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="no" id="reviewno" th:value="${review.no}" /><br/>
+                
+                <!-- <div th:if="${not #lists.isEmpty(reviewimage)}">
+                    <th:block th:each="tmp, idx : ${reviewimage}">
+                        <img th:src="@{/review/image(no=${tmp.no})}" style="padding-bottom: 10px;width:200px">
+                    </th:block>
+                </div> -->
+                
+                <div class="col-12">
+
+                    <div class="form-floating" style="padding-bottom: 10px;">
+
+                        <input  type="text" class="form-control" id="subject" placeholder="Subject" th:value="${review.title}" name="title">
+                        <label for="subject">제목</label>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea class="form-control" th:text="${review.content}" placeholder="Leave a message here" id="message" style="height: 200px"  name="content" th:value="${review.content}">
+                        </textarea>
+                        <label for="subject">내용</label>
+                    </div>
+                </div>
+                
+                
+                <div>
+                    <!-- <input type="file" accept="image/*" name="imageee" id="file" multiple="multiple"> --> 
+                    <br/>
+                    <label className="input-file-button" for="input-file">
+                        <img th:src="@{/img/Review/file.png}" style="width: 70px;padding-bottom: 10px; position: relative;">
+                    </label>
+                    <input type="file" id="input-file" style="display:none"  accept="image/*" th:onchange="|javascript:onChange(event)|"  /><br/>
+                    
+                </div> 
+
+                <div class="raw">
+
+                    <button th:onclick="|javascript:onSubmit()|" style="float: left;" class="btn btn-primary rounded-pill py-3 px-5" type="button">수정하기</button>
+                    
+                </form>            
+
+            <!-- 삭제  -->
+            <form th:action="@{/review/delete.do}" id="deletereview" method="post" >
+                <input type="hidden" th:value="${review.no}" name="no"/>
+                <button class="btn btn-primary rounded-pill py-3 px-5" style="float: left; margin-left: 20px;"
+                type="button" th:onclick="|javascript:deleteAction()|">삭제하기</button>
+            </form>
+            
+            <a th:href="@{/review/selectlist.do}">
+                <button  class="btn btn-primary rounded-pill py-3 px-5" type="button" style="float: left; margin-left: 20px;">목록</button>
+            </a>
+        </div>
+
+            <div id="divs">
+                    
+            </div>
+        </div>
+    </div>
+    <!-- 업데이트 끝 -->
+
+    
+    <div th:replace="/fragments/footer.html :: footerfragment"></div>
+
+    <script>
+        // csrf 검증용 토큰
+        var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+
+        const deleteAction = () =>{
+            if(confirm('삭제하시겠습니까?')== true){
+                alert('삭제되었습니다.');
+                
+                //id가 form인걸 찾아 submit수행
+                document.getElementById('deletereview').submit();
+
+            }
+            else{
+                alert('취소되었습니다.')
+            }
+        }
+
+        const updateAction = () =>{
+            if(confirm('수정하시겠습니까?')== true){
+                alert('수정되었습니다.');
+                
+                //id가 form인걸 찾아 submit수행
+                document.getElementById('updatereview').submit();
+
+            }
+            else{
+                alert('취소되었습니다.')
+            }
+        }
+
+        window.addEventListener('load', function(){
+            list();
+        });
+        
+        function list(){
+            const url = `[[@{/rest/review/imagelist.json?reviewno=}]]` + document.getElementById('reviewno').value;
+            axios.get(url).then(function(response){
+                console.log(response);
+                var imagesector = document.getElementById('imagesector');
+                imagesector.innerHTML = '';
+                for(let i=0; i<response.data.list.length; i++){
+                    imagesector.innerHTML += `<img src="http://3.38.209.149:8080/TEST202/review/image?no=${response.data.list[i]}" name="rawimage" style="padding-bottom: 10px;width:200px; margin-left: 20px;">`+
+                                            `<input type="button" class="btn-close" name="closebtn" style="position: absolute;" onclick="onimageDelete('${response.data.list[i]}')" />`+
+                                            `<input type="hidden" th:value="${response.data.list[i]}" name="imageno"/>`;
+                }
+            });
+        };
+
+        const onimageDelete = (idx) => {
+            const url = "[[@{/rest/review/imagedelete.json?no=}]]" + idx;
+            axios.delete(url).then(function(response){
+                if(response.data.status == 200){
+                    list();
+                }
+            });
+        };
+    </script>
+
+    <script>
+        const out   = document.getElementById("divs");
+        const file  = document.getElementById("input-file");
+        let files   = [];
+        
+        /* files 배열에서 추가 */
+        const onChange = (e) => {
+            console.log(e);
+            files.push(e.target.files[0]);
+            onPreview();
+        };
+
+        /* files 배열에서 삭제 */
+        const onDelete = (idx) => {
+            console.log(idx);
+            files.splice(idx, 1);
+            onPreview();
+        };
+
+        /* 이미지 추가,삭제시 화면표시 */
+        const onPreview = () => {
+            out.innerHTML = '';
+            for(let i=0; i<files.length; i++){
+                const url  = URL.createObjectURL(files[i]);
+
+                out.innerHTML += 
+                    `<div style="border:1px solid #cccccc;width:200px; display: inline-block; margin-left: 40px;">`+
+                        `<img src=${url} style="width:100%;"/>`+
+                        `<input type="button" class="btn-close" style="position: absolute;" onclick="onDelete('${i}')" />`+
+                    `</div>`;
+            }
+            console.log(files);
+            file.value= '';
+        };
+
+
+        /* rest controller 호출하기 */
+        const onSubmit = () => {
+
+            if(confirm('수정하시겠습니까?')== true){
+                
+                let req = new XMLHttpRequest();
+                let formData = new FormData();
+
+                for(let i=0;i<files.length;i++){
+                    formData.append("files", files[i]);
+                }
+
+                formData.append("no", document.getElementById('reviewno').value)
+                formData.append("title", document.getElementById('subject').value);
+                formData.append("content", document.getElementById('message').value);
+                
+                req.open("POST", "[[@{/rest/review/update.json}]]");
+                req.send(formData);
+                
+                console.log(req);
+                req.onload = function(){
+                    var obj = new Object(req.responseText);
+                    var json= JSON.parse(obj);
+                    console.log(json.status);
+                    if(json.status == 200){
+                        alert('수정되었습니다.');
+                        window.location.href= json.url;
+                    }
+                };
+            }
+            else{
+                alert('취소되었습니다.')
+            }
+        
+        };
+    </script>
+</body>
+</html>

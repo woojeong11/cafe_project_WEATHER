@@ -1,9 +1,13 @@
 # cafe_project_WEATHER
 
 가상의 카페 홈페이지를 제작했습니다. <br/>
-프로젝트 주소 : http://1.234.5.158:28080/teamproject/
- <br/>
- <h4> 주요기능 <h4>
+ <br/> 
+ [프로젝트 기간] : 2022.10 ~ 2022.12(8주)<br/>
+ [프로젝트 방식] : Spring MVC<br/>
+ [프로젝트 도구] : Visual Studio Code, H2 db, Github, Maven<br/>
+ [프로젝트 주소] : <a href="http://1.234.5.158:28080/teamproject/">http://1.234.5.158:28080/teamproject/</a>  
+ [사용 언어] : Html, Java, SQL, JavaScript(jquery), MyBatis, bootstrap<br/>
+ [주요기능]
  <ul>
   <li>날씨에 따른 메뉴추천
   <li>메뉴설명
